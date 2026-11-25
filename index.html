@@ -1,0 +1,2066 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>De Residuo a Recurso</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#F3F4EF;--card:#fff;--el:#E8EBE3;--fg:#1A1D18;--mu:#566050;--su:#8B9986;--ac:#16803C;--ah:#125F2D;--at:#DCFCE7;--wa:#C2410C;--wh:#9A3410;--wt:#FEE2E2;--bl:#1D4ED8;--bt:#DBEAFE;--go:#A55F0A;--gt:#FEF3C7;--bo:#D6DAD0;--sh:0 2px 8px rgba(0,0,0,.08);--shl:0 8px 24px rgba(0,0,0,.14);--r:12px;--rs:8px;--fd:'Syne',sans-serif;--fb:'Inter',sans-serif;--trans:220ms cubic-bezier(.4,0,.2,1)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0C120A;--card:#131A10;--el:#1A2316;--fg:#EBF0E8;--mu:#9BB091;--su:#5E7257;--ac:#4ADE80;--ah:#22C55E;--at:#052E16;--wa:#F87171;--wh:#FCA5A5;--wt:#2D0A0A;--bl:#93C5FD;--bt:#0C1A3D;--go:#FCD34D;--gt:#1C1203;--bo:#202E1A;--sh:0 2px 8px rgba(0,0,0,.3);--shl:0 8px 24px rgba(0,0,0,.5);color-scheme:dark}}
+:root[data-theme=dark]{--bg:#0C120A;--card:#131A10;--el:#1A2316;--fg:#EBF0E8;--mu:#9BB091;--su:#5E7257;--ac:#4ADE80;--ah:#22C55E;--at:#052E16;--wa:#F87171;--wh:#FCA5A5;--wt:#2D0A0A;--bl:#93C5FD;--bt:#0C1A3D;--go:#FCD34D;--gt:#1C1203;--bo:#202E1A;--sh:0 2px 8px rgba(0,0,0,.3);--shl:0 8px 24px rgba(0,0,0,.5);color-scheme:dark}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--fb);background:var(--bg);color:var(--fg);line-height:1.6;overflow-x:hidden;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0}
+img{max-width:100%}
+h1{font-family:var(--fd);font-size:clamp(1.9rem,5.5vw,3rem);font-weight:800;line-height:1.1;text-wrap:balance}
+h2{font-family:var(--fd);font-size:clamp(1.2rem,3.5vw,1.7rem);font-weight:700;line-height:1.2;text-wrap:balance}
+h3{font-family:var(--fd);font-size:1.1rem;font-weight:700;line-height:1.3}
+p{line-height:1.65}
+#app{min-height:100vh;display:flex;flex-direction:column}
+/* HEADER */
+#hdr{position:sticky;top:env(safe-area-inset-top,0px);z-index:100;background:var(--card);border-bottom:1px solid var(--bo);padding:10px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--sh)}
+#hdr-logo{font-family:var(--fd);font-weight:800;font-size:1rem;color:var(--ac);cursor:pointer;flex-shrink:0;background:none;border:none;padding:0}
+#hdr-prog-wrap{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+#hdr-prog-label{font-size:.72rem;color:var(--mu)}
+#hdr-bar{height:5px;background:var(--bo);border-radius:99px;overflow:hidden}
+#hdr-fill{height:100%;background:linear-gradient(90deg,var(--ac),var(--go));border-radius:99px;transition:width .5s ease;width:0%}
+#hdr-score{font-family:var(--fd);font-weight:800;font-size:.95rem;color:var(--go);flex-shrink:0;font-variant-numeric:tabular-nums}
+/* SCREENS */
+.screen{display:none;flex:1;flex-direction:column}
+.screen.active{display:flex}
+.scroll{overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch}
+.wrap{max-width:700px;margin:0 auto;padding:24px;width:100%}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 22px;border-radius:var(--rs);font-family:var(--fb);font-weight:600;font-size:.93rem;cursor:pointer;border:none;transition:all var(--trans);line-height:1.2;text-decoration:none}
+.btn-p{background:var(--ac);color:#fff}.btn-p:hover{background:var(--ah);transform:translateY(-1px);box-shadow:var(--shl)}
+.btn-w{background:var(--wa);color:#fff}.btn-w:hover{background:var(--wh);transform:translateY(-1px)}
+.btn-o{background:transparent;border:2px solid var(--ac);color:var(--ac)}.btn-o:hover{background:var(--at)}
+.btn-g{background:var(--el);color:var(--fg);border:1px solid var(--bo)}.btn-g:hover{background:var(--bo)}
+.btn-lg{padding:14px 32px;font-size:1rem;border-radius:var(--r)}
+.btn-full{width:100%}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important}
+.btn:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+/* CARDS */
+.card{background:var(--card);border-radius:var(--r);border:1px solid var(--bo);box-shadow:var(--sh);padding:20px}
+.card-el{background:var(--el)}
+/* EYEBROW */
+.eyebrow{font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin-bottom:6px}
+/* WELCOME */
+#s-welcome{align-items:stretch;overflow-y:auto;background:linear-gradient(160deg,var(--bg) 60%,var(--at) 100%)}
+.welcome-inner{max-width:620px;margin:0 auto;padding:48px 24px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:28px;flex:1}
+.welcome-logo{width:72px;height:72px;background:var(--ac);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;box-shadow:0 0 0 12px var(--at),0 0 0 24px color-mix(in srgb,var(--ac) 10%,transparent);animation:pulse 3s ease infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 10px var(--at),0 0 0 20px color-mix(in srgb,var(--ac) 8%,transparent)}50%{box-shadow:0 0 0 14px var(--at),0 0 0 28px color-mix(in srgb,var(--ac) 12%,transparent)}}
+.stats{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.stat{background:var(--card);border:1px solid var(--bo);border-radius:var(--r);padding:12px 18px;min-width:90px;display:flex;flex-direction:column;align-items:center;box-shadow:var(--sh)}
+.stat-n{font-family:var(--fd);font-size:1.3rem;font-weight:800;color:var(--wa);font-variant-numeric:tabular-nums}
+.stat-l{font-size:.7rem;color:var(--mu);text-align:center;line-height:1.3;margin-top:3px}
+.welcome-q{background:var(--card);border:2px solid var(--at);border-radius:var(--r);padding:18px 22px;max-width:460px;width:100%;font-size:1rem;font-weight:500}
+/* VIDEO */
+.pre-qs{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+.pre-q{background:var(--el);border-left:3px solid var(--ac);border-radius:0 var(--rs) var(--rs) 0;padding:14px 16px;font-size:.93rem}
+.video-card{background:var(--card);border-radius:var(--r);overflow:hidden;box-shadow:var(--shl);cursor:pointer;text-decoration:none;display:block;border:1px solid var(--bo)}
+.video-thumb{background:linear-gradient(135deg,var(--at),var(--bt));aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;position:relative}
+.video-play{width:64px;height:64px;background:var(--wa);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.6rem;color:#fff;box-shadow:var(--shl);transition:transform .2s}
+.video-card:hover .video-play{transform:scale(1.1)}
+.video-info{padding:16px 20px}
+/* QUIZ */
+.q-prog{margin-bottom:20px}
+.q-dots{display:flex;gap:5px;margin-top:8px}
+.q-dot{width:7px;height:7px;border-radius:50%;background:var(--bo);transition:all .3s}
+.q-dot.on{background:var(--ac);width:20px;border-radius:4px}
+.q-dot.done{background:var(--at);border:2px solid var(--ac)}
+.q-card{background:var(--card);border-radius:var(--r);padding:24px;box-shadow:var(--sh);border:1px solid var(--bo);margin-bottom:16px;animation:fadeUp .3s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.q-num{font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--wa);margin-bottom:6px}
+.q-text{font-family:var(--fd);font-size:1.08rem;font-weight:700;line-height:1.4;margin-bottom:18px}
+.q-opts{display:flex;flex-direction:column;gap:9px}
+.q-opt{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:var(--rs);border:2px solid var(--bo);cursor:pointer;transition:all var(--trans);background:var(--bg);font-size:.92rem;line-height:1.5;text-align:left;width:100%}
+.q-opt:hover:not([disabled]){border-color:var(--ac);background:var(--at)}
+.q-opt.sel{border-color:var(--ac);background:var(--at)}
+.q-opt.ok{border-color:var(--ac);background:var(--at);color:var(--ac)}
+.q-opt.ng{border-color:var(--wa);background:var(--wt);color:var(--wa)}
+.q-opt[disabled]{cursor:not-allowed}
+.q-let{width:22px;height:22px;border-radius:50%;background:var(--bo);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0}
+.q-opt.ok .q-let{background:var(--ac);color:#fff}
+.q-opt.ng .q-let{background:var(--wa);color:#fff}
+.q-fb{margin-top:14px;padding:12px 14px;border-radius:var(--rs);font-size:.88rem;line-height:1.5;display:none}
+.q-fb.show{display:flex;gap:8px;align-items:flex-start}
+.q-fb.ok-fb{background:var(--at);color:var(--ac)}
+.q-fb.ng-fb{background:var(--wt);color:var(--wa)}
+.q-pts{font-size:.75rem;font-weight:600;color:var(--go);margin-bottom:12px}
+/* TF */
+.tf-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.tf-btn{padding:22px 12px;border-radius:var(--r);font-family:var(--fd);font-size:1.05rem;font-weight:700;border:2px solid var(--bo);cursor:pointer;transition:all var(--trans);text-align:center;background:var(--bg);color:var(--fg)}
+.tf-btn.tv:hover:not([disabled]){border-color:var(--ac);background:var(--at);color:var(--ac)}
+.tf-btn.fv:hover:not([disabled]){border-color:var(--wa);background:var(--wt);color:var(--wa)}
+.tf-btn.sel-t{border-color:var(--ac);background:var(--at);color:var(--ac)}
+.tf-btn.sel-f{border-color:var(--wa);background:var(--wt);color:var(--wa)}
+.tf-btn.ok{border-color:var(--ac)!important;background:var(--at)!important}
+.tf-btn.ng{border-color:var(--wa)!important;background:var(--wt)!important}
+.tf-btn[disabled]{cursor:not-allowed}
+/* ORDER */
+.ord-items{display:flex;flex-direction:column;gap:7px;margin-bottom:12px}
+.ord-item{display:flex;align-items:center;gap:10px;padding:10px 13px;border-radius:var(--rs);border:2px solid var(--bo);cursor:pointer;font-size:.88rem;transition:all var(--trans);background:var(--bg)}
+.ord-item:hover:not(.placed):not([disabled]){border-color:var(--bl);background:var(--bt)}
+.ord-item.placed{opacity:.45;cursor:not-allowed;border-color:var(--ac)}
+.ord-slots{display:flex;flex-direction:column;gap:6px}
+.ord-slot{display:flex;align-items:center;gap:9px;padding:9px 13px;border-radius:var(--rs);border:2px dashed var(--bo);background:var(--el);font-size:.85rem;min-height:42px;color:var(--su)}
+.ord-slot.filled{border-color:var(--ac);background:var(--at);border-style:solid;color:var(--fg)}
+.ord-sn{width:22px;height:22px;border-radius:50%;background:var(--bo);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0;font-variant-numeric:tabular-nums}
+.ord-slot.filled .ord-sn{background:var(--ac);color:#fff}
+/* RESULTS */
+.res-hero{text-align:center;padding:36px 24px;display:flex;flex-direction:column;align-items:center;gap:18px}
+.score-ring{position:relative;width:130px;height:130px}
+.score-ring svg{transform:rotate(-90deg)}
+.ring-label{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-num{font-family:var(--fd);font-size:1.8rem;font-weight:800;color:var(--go);font-variant-numeric:tabular-nums}
+.ring-max{font-size:.75rem;color:var(--mu)}
+.badges-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.badge-item{display:flex;flex-direction:column;align-items:center;gap:5px;padding:12px 14px;background:var(--card);border:1px solid var(--bo);border-radius:var(--r);min-width:85px}
+.badge-em{font-size:1.6rem}
+.badge-nm{font-size:.7rem;font-weight:600;text-align:center;color:var(--mu)}
+/* MAP */
+.map-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;margin-top:20px}
+.map-card{background:var(--card);border:2px solid var(--bo);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:8px;cursor:pointer;transition:all var(--trans)}
+.map-card:hover{border-color:var(--ac);transform:translateY(-2px);box-shadow:var(--shl)}
+.map-card.done{border-color:var(--ac);background:linear-gradient(135deg,var(--card),var(--at))}
+.map-card.featured{border-color:var(--go);box-shadow:0 0 0 2px var(--gt)}
+.map-card-icon{font-size:1.8rem}
+.map-card-title{font-family:var(--fd);font-size:.95rem;font-weight:700}
+.map-card-desc{font-size:.8rem;color:var(--mu);line-height:1.4}
+.new-badge{display:inline-block;background:var(--go);color:#fff;font-size:.65rem;font-weight:700;padding:2px 7px;border-radius:4px;text-transform:uppercase;letter-spacing:.05em}
+/* MODULE */
+.mod-header{margin-bottom:20px;padding-bottom:18px;border-bottom:1px solid var(--bo);display:flex;align-items:flex-start;gap:14px}
+.mod-icon{width:52px;height:52px;border-radius:var(--rs);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0}
+.mod-hook{background:linear-gradient(135deg,var(--at),var(--bt));border-radius:var(--r);padding:18px 20px;margin-bottom:20px;font-size:1rem;font-weight:500;line-height:1.55;border-left:4px solid var(--ac)}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-bottom:20px}
+.info-card{background:var(--card);border:1px solid var(--bo);border-radius:var(--rs);padding:14px}
+.info-card h4{font-size:.88rem;color:var(--ac);margin-bottom:5px}
+.info-card p{font-size:.82rem;color:var(--mu);line-height:1.45}
+/* ACTIVITY */
+.act-box{background:var(--card);border:2px solid var(--ac);border-radius:var(--r);padding:20px;margin-bottom:18px}
+.act-title{font-family:var(--fd);font-size:.95rem;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.act-lbl{background:var(--ac);color:#fff;font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.05em}
+/* CLASSIFY */
+.cl-items{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.cl-item{padding:7px 13px;border-radius:var(--rs);border:2px solid var(--bo);cursor:pointer;font-size:.88rem;transition:all var(--trans);background:var(--bg);user-select:none;display:flex;align-items:center;gap:5px}
+.cl-item:hover{border-color:var(--ac);background:var(--at)}
+.cl-item.sel{border-color:var(--ac);background:var(--ac);color:#fff}
+.cl-item.placed{opacity:.4;cursor:not-allowed;border-style:dashed}
+.cl-bins{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+@media(max-width:420px){.cl-bins{grid-template-columns:1fr}}
+.cl-bin{min-height:70px;border:2px dashed var(--bo);border-radius:var(--rs);padding:9px;display:flex;flex-direction:column;gap:5px;cursor:pointer;transition:border-color .2s}
+.cl-bin:hover{border-color:var(--ac)}
+.cl-bin-h{font-size:.78rem;font-weight:700;color:var(--mu);display:flex;align-items:center;gap:5px}
+.cl-placed{display:flex;flex-wrap:wrap;gap:4px;min-height:28px}
+.cl-chip{font-size:.78rem;padding:3px 8px;border-radius:4px;background:var(--at);color:var(--ac);font-weight:500}
+.cl-chip.ng{background:var(--wt);color:var(--wa)}
+/* BLUEPRINT */
+#s-bp{background:var(--bg)}
+.bp-wrap{max-width:700px;margin:0 auto;padding:24px;width:100%}
+.bp-player{background:var(--card);border-radius:var(--r);border:1px solid var(--bo);box-shadow:var(--shl);overflow:hidden}
+.bp-grid-bg{background-color:var(--card);background-image:radial-gradient(circle,var(--bo) 1px,transparent 1px);background-size:24px 24px;position:relative}
+.bp-top{padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bo)}
+.bp-step-txt{font-family:var(--fd);font-size:.85rem;font-weight:700;color:var(--mu)}
+.bp-dots-row{display:flex;gap:5px}
+.bp-dot{width:8px;height:8px;border-radius:50%;background:var(--bo);transition:all .3s;cursor:pointer}
+.bp-dot.on{background:var(--ac);width:20px;border-radius:4px}
+.bp-dot.done{background:var(--ac);opacity:.5}
+.bp-scene-wrap{min-height:260px;position:relative;overflow:hidden}
+.bp-scene{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;gap:12px;opacity:0;transition:opacity .4s ease,transform .4s ease;transform:translateY(10px);pointer-events:none}
+.bp-scene.on{opacity:1;transform:translateY(0);pointer-events:auto}
+.bp-visual{font-size:clamp(1.8rem,5vw,2.4rem);text-align:center;line-height:1.5;position:relative;min-height:100px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;width:100%}
+.bp-label{font-family:var(--fd);font-size:clamp(.9rem,2.5vw,1.1rem);font-weight:700;text-align:center;max-width:420px;line-height:1.35}
+.bp-sub{font-size:.82rem;color:var(--mu);text-align:center;max-width:380px;font-style:italic}
+.bp-callout{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--wa);color:#fff;font-weight:800;font-size:.8rem;position:absolute;top:4px;right:calc(50% - 60px)}
+.bp-ctrls{padding:14px 18px;border-top:1px solid var(--bo);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.bp-ctrls .btn{flex:1;min-width:0;font-size:.85rem;padding:9px 14px}
+.bp-repeat{display:flex;justify-content:center;padding:0 18px 14px}
+/* Scene-specific visuals */
+.bp-bin{font-size:2.4rem;position:relative;display:inline-block;text-align:center}
+.bp-bin-items{font-size:1.3rem;line-height:1.3;text-align:center}
+.bp-contamination{position:relative;display:inline-flex;gap:4px;align-items:center;font-size:1.3rem}
+.bp-x{font-size:.9rem;color:var(--wa)}
+.bp-3bins{display:flex;gap:16px;align-items:flex-end;justify-content:center;flex-wrap:wrap}
+.bp-bin-col{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:1rem}
+.bp-bin-box{padding:8px 14px;border-radius:var(--rs);border:2px solid;text-align:center;min-width:70px}
+.bp-bin-box.org{border-color:var(--ac);background:var(--at);color:var(--ac)}
+.bp-bin-box.rec{border-color:var(--bl);background:var(--bt);color:var(--bl)}
+.bp-bin-box.pel{border-color:var(--wa);background:var(--wt);color:var(--wa)}
+.bp-grind{display:flex;align-items:center;gap:10px;font-size:1.3rem;flex-wrap:wrap;justify-content:center}
+.bp-arr{font-size:1.5rem;color:var(--mu)}
+.bp-micro{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;max-width:260px;margin:0 auto}
+.bp-micro-item{display:flex;flex-direction:column;align-items:center;gap:4px;background:var(--el);border-radius:var(--rs);padding:10px;font-size:.8rem;text-align:center}
+.bp-micro-icon{font-size:1.5rem;animation:micropulse 2s ease-in-out infinite}
+@keyframes micropulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.bp-transform{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;font-size:1rem}
+.bp-eq{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;font-size:1.2rem}
+.bp-eq-plus{font-size:1rem;color:var(--mu)}
+.bp-result{background:var(--go);color:var(--gt);border-radius:var(--rs);padding:6px 12px;font-weight:700;font-size:1rem}
+.bp-plant{display:flex;flex-direction:column;align-items:center;gap:8px}
+.bp-plant-grow{font-size:2rem;animation:grow 1.5s ease infinite}
+@keyframes grow{0%,100%{transform:scale(1)}50%{transform:scale(1.08) translateY(-3px)}}
+.bp-final-msg{background:var(--at);border:2px solid var(--ac);border-radius:var(--r);padding:16px 20px;text-align:center;font-family:var(--fd);font-weight:700;color:var(--ac);font-size:1rem;line-height:1.4;margin-top:4px}
+/* BP QUESTION */
+#bp-question{background:var(--card);border-radius:var(--r);border:2px solid var(--go);padding:20px;margin-top:16px;animation:fadeUp .4s ease}
+.bp-q-title{font-family:var(--fd);font-size:1rem;font-weight:700;margin-bottom:14px;text-align:center}
+.bp-q-opts{display:flex;flex-direction:column;gap:9px}
+.bp-qopt{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:var(--rs);border:2px solid var(--bo);cursor:pointer;transition:all var(--trans);background:var(--bg);font-size:.93rem;text-align:left;width:100%}
+.bp-qopt:hover:not([disabled]){border-color:var(--ac);background:var(--at);transform:scale(1.02)}
+.bp-qopt[disabled]{cursor:not-allowed}
+.bp-qopt.ok{border-color:var(--ac);background:var(--at)}
+.bp-qopt.ng{border-color:var(--wa);background:var(--wt)}
+.bp-qfb{margin-top:12px;padding:12px 16px;border-radius:var(--rs);font-size:.88rem;line-height:1.5;display:none}
+.bp-qfb.show{display:block}
+.bp-qfb.ok-fb{background:var(--at);color:var(--ac)}
+.bp-qfb.ng-fb{background:var(--wt);color:var(--wa)}
+.bp-alt-route{background:var(--bt);border-radius:var(--rs);padding:14px 16px;margin-top:14px;font-size:.85rem}
+.bp-alt-route h4{font-size:.85rem;color:var(--bl);margin-bottom:6px}
+.bp-alt-steps{display:flex;align-items:center;flex-wrap:wrap;gap:4px;font-size:.78rem;color:var(--bl)}
+.bp-alt-arr{color:var(--mu)}
+/* M2 CIRCULAR */
+.ec-diagram{position:relative;width:100%;max-width:360px;margin:0 auto 20px}
+.ec-svg{width:100%;height:auto}
+.ec-info{background:var(--el);border-radius:var(--rs);padding:14px 16px;min-height:60px;font-size:.88rem;line-height:1.5;border-left:3px solid var(--ac);margin-top:12px}
+/* CHALLENGE */
+.ch-wastes{display:flex;flex-direction:column;gap:14px;margin:16px 0}
+.ch-waste{background:var(--card);border:1px solid var(--bo);border-radius:var(--r);padding:16px}
+.ch-waste-h{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.ch-waste-em{font-size:1.5rem}
+.ch-waste-nm{font-weight:700;font-size:.95rem}
+.ch-row{display:flex;flex-direction:column;gap:7px;margin-top:8px}
+.ch-label{font-size:.78rem;font-weight:600;color:var(--mu)}
+.ch-sel{width:100%;padding:9px 12px;border-radius:var(--rs);border:2px solid var(--bo);background:var(--bg);color:var(--fg);font-family:var(--fb);font-size:.88rem;cursor:pointer}
+.ch-sel:focus{outline:none;border-color:var(--ac)}
+.ch-result{background:var(--card);border-radius:var(--rs);padding:12px 14px;font-size:.85rem;display:none;margin-top:8px;line-height:1.5}
+.ch-result.ok{background:var(--at);color:var(--ac);display:block}
+.ch-result.ng{background:var(--wt);color:var(--wa);display:block}
+/* PROGRESS */
+.prog-score{text-align:center;padding:28px 0 20px;border-bottom:1px solid var(--bo);margin-bottom:20px}
+.prog-score-n{font-family:var(--fd);font-size:3.5rem;font-weight:800;color:var(--go);font-variant-numeric:tabular-nums;line-height:1}
+.prog-score-l{font-size:.85rem;color:var(--mu);margin-top:4px}
+.prog-bar-wrap{margin:12px 0 24px}
+.prog-bar{height:10px;background:var(--bo);border-radius:99px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--ac),var(--go));border-radius:99px;transition:width .6s ease}
+.ach-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-bottom:20px}
+.ach-card{background:var(--card);border:2px solid var(--bo);border-radius:var(--r);padding:14px 10px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:7px;transition:all var(--trans)}
+.ach-card.earned{border-color:var(--go);background:var(--gt)}
+.ach-card.locked{opacity:.45;filter:grayscale(1)}
+.ach-em{font-size:1.8rem}
+.ach-nm{font-size:.75rem;font-weight:700;line-height:1.3}
+.ach-ds{font-size:.68rem;color:var(--mu);line-height:1.3}
+/* GLOSSARY */
+.glos-search{margin-bottom:14px}
+.glos-input{width:100%;padding:10px 14px;border-radius:var(--rs);border:2px solid var(--bo);background:var(--card);color:var(--fg);font-family:var(--fb);font-size:.93rem}
+.glos-input:focus{outline:none;border-color:var(--ac)}
+.glos-list{display:flex;flex-direction:column;gap:2px}
+.glos-item{background:var(--card);border-radius:var(--rs);border:1px solid var(--bo);overflow:hidden}
+.glos-term{padding:12px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-weight:600;font-size:.93rem;transition:background .2s}
+.glos-term:hover{background:var(--el)}
+.glos-def{padding:0 16px 12px;font-size:.87rem;color:var(--mu);line-height:1.6;display:none}
+.glos-def.open{display:block}
+/* MOD FOOTER */
+.mod-foot{border-top:1px solid var(--bo);padding:14px 16px;display:flex;justify-content:space-between;gap:10px;background:var(--card);position:sticky;bottom:env(safe-area-inset-bottom,0px)}
+/* TOAST */
+#toast{position:fixed;top:70px;right:16px;z-index:999;background:var(--ac);color:#fff;padding:10px 16px;border-radius:var(--rs);font-size:.88rem;font-weight:600;box-shadow:var(--shl);transform:translateX(200%);transition:transform .3s ease;pointer-events:none}
+#toast.show{transform:translateX(0)}
+.comp-table{border-collapse:collapse;width:100%;min-width:720px;font-size:.8rem}
+.comp-table th,.comp-table td{border:1px solid var(--bo);padding:8px;text-align:left;vertical-align:top}
+.comp-table th{background:var(--el);font-weight:600}
+.case-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:8px}
+.case-row .btn{justify-content:center}
+/* @media */
+@media(max-width:480px){.map-grid{grid-template-columns:1fr 1fr}.ach-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:360px){.map-grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+/* VOICE FAB */
+@keyframes voicePulse{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--wa) 40%,transparent)}50%{box-shadow:0 0 0 10px color-mix(in srgb,var(--wa) 0%,transparent)}}
+.voice-bar{display:flex;align-items:center;gap:8px;padding:10px 14px;background:linear-gradient(135deg,var(--at),var(--bt));border-radius:var(--rs);margin-bottom:16px}
+.voice-bar .vbtn{background:var(--ac);color:#fff;border:none;border-radius:50%;width:30px;height:30px;font-size:.8rem;cursor:pointer;flex-shrink:0;transition:background .2s}
+.voice-bar .vbtn:hover{background:var(--ah)}
+.voice-bar span{font-size:.82rem;color:var(--mu)}
+/* MODULE ILLUSTRATION */
+.mod-illus{border-radius:var(--r);padding:24px 20px;margin-bottom:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;background:linear-gradient(135deg,var(--at),var(--bt))}
+.mod-illus-em{font-size:clamp(2.2rem,7vw,3.5rem);line-height:1.2}
+.mod-illus-label{font-family:var(--fd);font-size:.85rem;font-weight:700;color:var(--mu)}
+/* BAR CHART */
+.bar-chart{display:flex;flex-direction:column;gap:9px;margin:16px 0}
+.bar-row{display:flex;align-items:center;gap:10px;font-size:.82rem}
+.bar-label{width:110px;flex-shrink:0;text-align:right;color:var(--mu);line-height:1.3}
+.bar-track{flex:1;height:22px;background:var(--bo);border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;transition:width .9s ease;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;font-size:.72rem;font-weight:700;color:#fff}
+.bar-fill.org{background:var(--ac)}
+.bar-fill.pap{background:var(--go)}
+.bar-fill.pla{background:var(--bl)}
+.bar-fill.oth{background:var(--su)}
+.bar-fill.vid{background:var(--wa)}
+/* TABS */
+.tab-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.tab-btn{padding:7px 13px;border-radius:var(--rs);border:2px solid var(--bo);background:var(--bg);color:var(--mu);font-size:.8rem;font-weight:600;cursor:pointer;transition:all var(--trans)}
+.tab-btn.on{border-color:var(--ac);background:var(--at);color:var(--ac)}
+.tab-panel{display:none}.tab-panel.on{display:block}
+/* MATCH ACTIVITY */
+.match-wrap{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:420px){.match-wrap{grid-template-columns:1fr}}
+.match-items,.match-targets{display:flex;flex-direction:column;gap:7px}
+.match-col-h{font-size:.72rem;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.match-item{padding:9px 12px;border-radius:var(--rs);border:2px solid var(--bo);cursor:pointer;font-size:.82rem;transition:all var(--trans);background:var(--bg)}
+.match-item:hover:not(.placed){border-color:var(--bl);background:var(--bt)}
+.match-item.sel{border-color:var(--ac);background:var(--ac);color:#fff}
+.match-item.placed{opacity:.4;cursor:not-allowed}
+.match-target{padding:9px 12px;border-radius:var(--rs);border:2px dashed var(--bo);background:var(--el);font-size:.8rem;min-height:40px;cursor:pointer;transition:border-color .2s;color:var(--su)}
+.match-target:hover{border-color:var(--ac)}
+.match-target.filled{border-style:solid;border-color:var(--ac);background:var(--at);color:var(--fg)}
+.match-target.ok{border-color:var(--ac)!important;background:var(--at)!important}
+.match-target.ng{border-color:var(--wa)!important;background:var(--wt)!important}
+/* SLIDER ACT */
+.sl-row{margin:12px 0}
+.sl-row label{font-size:.85rem;color:var(--fg);margin-bottom:4px;display:flex;justify-content:space-between}
+.sl-row input[type=range]{width:100%;accent-color:var(--ac)}
+/* CASE CARDS */
+.case-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin:14px 0}
+.case-card{background:var(--card);border:2px solid var(--bo);border-radius:var(--r);padding:16px;cursor:pointer;transition:all var(--trans)}
+.case-card:hover{border-color:var(--ac);transform:translateY(-2px)}
+.case-card.open{border-color:var(--go)}
+.case-em{font-size:1.8rem;margin-bottom:8px}
+.case-title{font-family:var(--fd);font-size:.9rem;font-weight:700;margin-bottom:4px}
+.case-loc{font-size:.75rem;color:var(--su)}
+.case-detail{background:var(--el);border-radius:var(--rs);padding:14px;font-size:.85rem;line-height:1.6;display:none;margin-top:12px;border-left:3px solid var(--go)}
+.case-detail.open{display:block}
+/* REACT BUILDER */
+.react-eq{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:16px;background:var(--el);border-radius:var(--r);margin:12px 0}
+.react-op{font-size:1rem;color:var(--mu);font-weight:600}
+.react-slot{min-width:80px;padding:8px 10px;border-radius:var(--rs);border:2px dashed var(--bo);background:var(--bg);font-size:.8rem;text-align:center;cursor:pointer;transition:all .2s;color:var(--su)}
+.react-slot:hover{border-color:var(--ac)}
+.react-slot.filled{border-style:solid;border-color:var(--ac);background:var(--at);color:var(--fg)}
+.react-tokens{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}
+.react-token{padding:7px 12px;border-radius:var(--rs);border:2px solid var(--go);background:var(--gt);color:var(--go);font-size:.82rem;cursor:pointer;font-weight:600;transition:all var(--trans)}
+.react-token:hover:not(.placed){background:var(--go);color:#fff;transform:scale(1.04)}
+.react-token.placed{opacity:.35;cursor:not-allowed}
+/* COMPOST SLIDERS */
+.comp-params{display:flex;flex-direction:column;gap:14px;margin:12px 0}
+.comp-gauge{background:var(--card);border:1px solid var(--bo);border-radius:var(--rs);padding:14px}
+.comp-gauge h4{font-size:.85rem;margin-bottom:8px}
+.comp-range{display:flex;gap:8px;align-items:center;font-size:.8rem;color:var(--mu)}
+.comp-val{font-family:var(--fd);font-weight:800;font-size:1.1rem;color:var(--go);min-width:60px;text-align:right}
+/* M7 QUIZ */
+.m7-q{background:var(--card);border:1px solid var(--bo);border-radius:var(--rs);padding:14px;margin-bottom:10px}
+.m7-q-txt{font-size:.9rem;font-weight:600;margin-bottom:10px}
+.m7-opts{display:flex;flex-wrap:wrap;gap:6px}
+.m7-opt{padding:6px 12px;border-radius:var(--rs);border:2px solid var(--bo);background:var(--bg);font-size:.8rem;cursor:pointer;transition:all var(--trans)}
+.m7-opt:hover:not([disabled]){border-color:var(--ac);background:var(--at)}
+.m7-opt.ok{border-color:var(--ac);background:var(--at);color:var(--ac)}
+.m7-opt.ng{border-color:var(--wa);background:var(--wt);color:var(--wa)}
+</style>
+
+<div id="app">
+<div id="toast"></div>
+
+<!-- HEADER -->
+<header id="hdr" hidden>
+  <button id="hdr-logo" onclick="goTo('s-map')">D→R</button>
+  <div id="hdr-prog-wrap">
+    <div id="hdr-prog-label">0 de 9 módulos</div>
+    <div id="hdr-bar"><div id="hdr-fill"></div></div>
+  </div>
+  <div id="hdr-score">0 pts</div>
+</header>
+
+<!-- WELCOME -->
+<section id="s-welcome" class="screen active">
+  <div class="welcome-inner">
+    <div class="welcome-logo">♻️</div>
+    <div>
+      <div class="eyebrow">Química Ambiental · Ing. Ambiental 2°</div>
+      <h1>De Residuo<br>a Recurso</h1>
+      <p style="color:var(--mu);margin-top:10px;font-size:1.05rem">Cada residuo esconde una oportunidad.</p>
+    </div>
+    <div class="stats">
+      <div class="stat"><span class="stat-n" id="cnt1">0</span><span class="stat-l">Millones ton/año de residuos globales</span></div>
+      <div class="stat"><span class="stat-n" id="cnt2">0%</span><span class="stat-l">Orgánico en basura colombiana</span></div>
+      <div class="stat"><span class="stat-n" id="cnt3">0%</span><span class="stat-l">Se convierte en residuo al fabricar un auto</span></div>
+    </div>
+    <div class="welcome-q">
+      <strong>🤔 Pregunta inicial:</strong><br>¿Qué crees que pasa con lo que tiras a la basura?
+    </div>
+    <button class="btn btn-p btn-lg" onclick="startApp()">Descubrir →</button>
+    <button class="btn btn-g" onclick="goTo('s-map')">Ir directo a los casos prácticos</button>
+  </div>
+</section>
+
+<!-- VIDEO -->
+<section id="s-video" class="screen">
+  <div class="scroll"><div class="wrap">
+    <div class="eyebrow">Actividad de enganche</div>
+    <h2>Ve este video antes de continuar</h2>
+    <p style="color:var(--mu);margin:8px 0 20px;font-size:.93rem">Este documental cambió la forma en que muchas empresas piensan sus residuos.</p>
+    <div style="font-weight:600;font-size:.88rem;color:var(--ac);margin-bottom:10px">💭 Piensa antes de ver:</div>
+    <div class="pre-qs">
+      <div class="pre-q">1. ¿Cuántos objetos que usas hoy terminarán siendo basura?</div>
+      <div class="pre-q">2. ¿Crees que una empresa puede <em>ahorrar dinero</em> siendo más sostenible?</div>
+      <div class="pre-q">3. ¿Puede el residuo de una empresa ser materia prima de otra?</div>
+    </div>
+    <a class="video-card" href="https://www.youtube.com/watch?v=a5p3DhH-9iU" target="_blank" rel="noopener" aria-label="Ver video en YouTube">
+      <div class="video-thumb">
+        <div class="video-play">▶</div>
+      </div>
+      <div class="video-info">
+        <div style="font-family:var(--fd);font-weight:700;font-size:.97rem;margin-bottom:4px">Waste = Food — Documental sobre Economía Circular</div>
+        <div style="font-size:.8rem;color:var(--mu)">YouTube · ~49 min · Subtítulos disponibles · Abre en nueva pestaña</div>
+      </div>
+    </a>
+    <p style="font-size:.82rem;color:var(--su);margin:12px 0">No tienes que ver el video completo. Con los primeros 10-15 minutos tendrás suficiente para las preguntas.</p>
+    <button class="btn btn-p btn-full" style="margin-top:16px" onclick="goTo('s-quiz');earnBadge('video')">Ya vi el video, continuar →</button>
+  </div></div>
+</section>
+
+<!-- QUIZ -->
+<section id="s-quiz" class="screen">
+  <div class="scroll"><div class="wrap">
+    <div class="q-prog">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div class="eyebrow">Quiz del video</div>
+        <div id="q-counter" style="font-size:.8rem;color:var(--mu)">Pregunta 1 de 8</div>
+      </div>
+      <div class="q-dots" id="q-dots"></div>
+    </div>
+    <div id="q-area"></div>
+    <div style="display:flex;justify-content:flex-end;margin-top:4px">
+      <button class="btn btn-p" id="q-next" onclick="nextQ()" hidden>Siguiente →</button>
+    </div>
+  </div></div>
+</section>
+
+<!-- RESULT -->
+<section id="s-result" class="screen">
+  <div class="scroll"><div class="res-hero">
+    <div class="eyebrow">Resultado del quiz</div>
+    <div class="score-ring">
+      <svg width="130" height="130" viewBox="0 0 130 130">
+        <circle cx="65" cy="65" r="55" fill="none" stroke="var(--bo)" stroke-width="10"/>
+        <circle id="ring-arc" cx="65" cy="65" r="55" fill="none" stroke="var(--go)" stroke-width="10" stroke-linecap="round" stroke-dasharray="345.6" stroke-dashoffset="345.6"/>
+      </svg>
+      <div class="ring-label"><div class="ring-num" id="ring-num">0</div><div class="ring-max">/ 105 pts</div></div>
+    </div>
+    <h2 id="res-msg">¡Buen intento!</h2>
+    <p id="res-sub" style="color:var(--mu);text-align:center;max-width:380px;font-size:.93rem"></p>
+    <div class="badges-row" id="res-badges"></div>
+    <button class="btn btn-p btn-lg" onclick="goTo('s-map')">Ver mi ruta de aprendizaje →</button>
+  </div></div>
+</section>
+
+<!-- MAP -->
+<section id="s-map" class="screen">
+  <div class="scroll"><div class="wrap">
+    <h2>Tu ruta de aprendizaje</h2>
+    <p style="color:var(--mu);margin:6px 0 4px;font-size:.9rem">Explora cada módulo en orden o elige el que más te interese.</p>
+    <div style="font-size:.83rem;color:var(--su);margin-bottom:4px" id="map-prog-txt">0 de 9 módulos completados</div>
+    <div style="height:6px;background:var(--bo);border-radius:99px;overflow:hidden;margin-bottom:16px"><div id="map-fill" style="height:100%;background:linear-gradient(90deg,var(--ac),var(--go));border-radius:99px;transition:width .5s ease;width:0%"></div></div>
+    <h3 style="margin:18px 0 10px">Empieza por un caso</h3>
+    <div class="case-row">
+      <button class="btn btn-p" onclick="openRoute('pet')">🧴 Botellas PET</button>
+      <button class="btn btn-p" onclick="openRoute('org')">🌱 Residuos orgánicos</button>
+      <button class="btn btn-p" onclick="openRoute('bat')">🔋 Baterías y RAEE</button>
+    </div>
+    <div class="map-grid" id="map-grid"></div>
+    <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-g" onclick="goTo('s-prog')">📊 Mi progreso</button>
+      <button class="btn btn-g" onclick="goTo('s-lab')">🧪 Laboratorio</button>
+      <button class="btn btn-g" onclick="goTo('s-comp')">⚖️ Comparador</button>
+      <button class="btn btn-g" onclick="goTo('s-bit')">📓 Bitácora</button>
+      <button class="btn btn-g" onclick="goTo('s-glos')">📖 Glosario</button>
+    </div>
+  </div></div>
+</section>
+
+<!-- M1: Residuos y Recursos -->
+<section id="s-m1" class="screen">
+  <div class="scroll"><div class="wrap">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:var(--wt)">🗑️</div>
+      <div><div class="eyebrow">Módulo 1</div><h2>Residuos y Recursos</h2></div>
+    </div>
+    <div class="voice-bar"><button class="vbtn" onclick="speakNarration('m1')">🔊</button><span>Escuchar explicación del módulo</span></div>
+    <div class="mod-hook">¿Es basura o es un recurso que aún no encontró su destino?</div>
+    <div class="info-grid">
+      <div class="info-card"><h4>Residuo</h4><p>Material del que ya no obtenemos provecho en su forma actual. No es "basura": es un material fuera de lugar.</p></div>
+      <div class="info-card"><h4>Recurso</h4><p>Material que puede recuperarse y usarse nuevamente. El residuo de hoy puede ser el recurso de mañana.</p></div>
+      <div class="info-card"><h4>Valorización</h4><p>Proceso que devuelve valor económico y ambiental a un residuo, transformándolo en algo útil.</p></div>
+      <div class="info-card"><h4>Jerarquía</h4><p>Reducir → Reutilizar → Reciclar → Recuperar → Disponer. Siempre intentar lo primero posible.</p></div>
+    </div>
+    <div class="act-box">
+      <div class="act-title"><span class="act-lbl">Actividad</span> ¿Dónde va cada residuo?</div>
+      <p style="font-size:.85rem;color:var(--mu);margin-bottom:12px">Selecciona un residuo (se resalta) y luego haz clic en su categoría correcta.</p>
+      <div class="cl-items" id="cl-items"></div>
+      <div class="cl-bins" id="cl-bins"></div>
+      <div id="cl-fb" style="margin-top:12px;padding:10px 14px;border-radius:var(--rs);font-size:.87rem;display:none"></div>
+      <div id="cl-done" hidden style="margin-top:14px;background:var(--at);border-radius:var(--rs);padding:14px;text-align:center">
+        <div style="font-size:1.5rem;margin-bottom:6px">🎉</div>
+        <strong style="color:var(--ac)">¡Clasificación completa!</strong>
+        <p style="font-size:.85rem;color:var(--mu);margin-top:4px">Ya conoces las categorías básicas de residuos. Ahora veamos cómo recuperar su valor.</p>
+      </div>
+    </div>
+  </div></div>
+  <div class="mod-foot">
+    <button class="btn btn-g" onclick="goTo('s-map')">← Mapa</button>
+    <button class="btn btn-p" onclick="goTo('s-bp');completeModule('m1')">La Ruta Animada →</button>
+  </div>
+</section>
+
+<!-- BLUEPRINT MODULE -->
+<section id="s-bp" class="screen">
+  <div class="scroll">
+    <div class="bp-wrap">
+      <div class="mod-header">
+        <div class="mod-icon" style="background:var(--gt)">🎬</div>
+        <div><div class="eyebrow">Módulo Animado · Blueprint</div><h2>De Residuo a Recurso: La Ruta</h2></div>
+      </div>
+      <div class="voice-bar"><button class="vbtn" onclick="speakNarration('bp')">🔊</button><span>Escuchar narración del módulo</span></div>
+      <div class="mod-hook">Un residuo puede convertirse en recurso si lo separamos, procesamos y le damos un nuevo uso.</div>
+
+      <div class="bp-player bp-grid-bg">
+        <div class="bp-top">
+          <div class="bp-step-txt">Paso <span id="bp-num">1</span> de 7</div>
+          <div class="bp-dots-row" id="bp-dots"></div>
+        </div>
+
+        <div class="bp-scene-wrap" id="bp-scene-wrap">
+          <!-- Scene 0 -->
+          <div class="bp-scene on" id="bp-s0">
+            <div class="bp-visual">
+              <div class="bp-bin">🗑️</div>
+              <div class="bp-bin-items">🍌 🥤 📰 🔋 🍎</div>
+              <div class="bp-callout">1</div>
+            </div>
+            <div class="bp-label">¿Qué pasa cuando mezclamos todo?</div>
+            <div class="bp-sub">Cocina, sala, baño... todo mezclado en una bolsa</div>
+          </div>
+          <!-- Scene 1 -->
+          <div class="bp-scene" id="bp-s1">
+            <div class="bp-visual">
+              <div class="bp-contamination">🥤<span class="bp-x">❌</span>🍌<span class="bp-x">❌</span>📰</div>
+              <div style="font-size:.85rem;margin-top:8px;color:var(--wa);font-weight:600">El plástico se contamina con restos orgánicos</div>
+            </div>
+            <div class="bp-label">Mezclados, es más difícil recuperar su valor</div>
+            <div class="bp-sub">La contaminación entre materiales reduce su posibilidad de reciclaje</div>
+          </div>
+          <!-- Scene 2 -->
+          <div class="bp-scene" id="bp-s2">
+            <div class="bp-visual">
+              <div class="bp-3bins">
+                <div class="bp-bin-col"><div class="bp-bin-box org">🌱<br><small>Orgánico</small></div><div style="font-size:.7rem;color:var(--mu)">🍌 🍎 🥦</div></div>
+                <div class="bp-bin-col"><div class="bp-bin-box rec">♻️<br><small>Reciclable</small></div><div style="font-size:.7rem;color:var(--mu)">🥤 📰</div></div>
+                <div class="bp-bin-col"><div class="bp-bin-box pel">⚠️<br><small>Peligroso</small></div><div style="font-size:.7rem;color:var(--mu)">🔋 💊</div></div>
+              </div>
+            </div>
+            <div class="bp-label">Separamos lo orgánico de los reciclables</div>
+            <div class="bp-sub">La separación en la fuente es el primer paso de la valorización</div>
+          </div>
+          <!-- Scene 3 -->
+          <div class="bp-scene" id="bp-s3">
+            <div class="bp-visual">
+              <div class="bp-grind">
+                <div style="font-size:1.6rem">🍌🍎🥦</div>
+                <div class="bp-arr">→</div>
+                <div style="font-size:1.3rem">⚙️</div>
+                <div class="bp-arr">→</div>
+                <div style="font-size:1rem;line-height:1.3">🟫🟫🟫<br>🟫🟫🟫</div>
+              </div>
+            </div>
+            <div class="bp-label">Reducimos el tamaño de los residuos orgánicos</div>
+            <div class="bp-sub">Como partir chocolate: más fácil de procesar en piezas pequeñas</div>
+          </div>
+          <!-- Scene 4 -->
+          <div class="bp-scene" id="bp-s4">
+            <div class="bp-visual">
+              <div class="bp-micro">
+                <div class="bp-micro-item"><span class="bp-micro-icon">🦠</span><span>Microorganismos</span></div>
+                <div class="bp-micro-item"><span class="bp-micro-icon">💧</span><span>Humedad 50-60%</span></div>
+                <div class="bp-micro-item"><span class="bp-micro-icon">🌡️</span><span>Temp. 55-65°C</span></div>
+                <div class="bp-micro-item"><span class="bp-micro-icon">💨</span><span>Oxígeno</span></div>
+              </div>
+            </div>
+            <div class="bp-label">Los microorganismos inician la transformación</div>
+            <div class="bp-sub">Este proceso biológico aerobio se llama compostaje</div>
+          </div>
+          <!-- Scene 5 -->
+          <div class="bp-scene" id="bp-s5">
+            <div class="bp-visual">
+              <div class="bp-eq">
+                <span>🍌🍎</span><span class="bp-eq-plus">+</span><span>💧</span><span class="bp-eq-plus">+</span><span>💨</span><span class="bp-eq-plus">+</span><span>⏱️</span>
+                <div class="bp-arr" style="margin-left:4px">→</div>
+                <div class="bp-result">🌍 Compost</div>
+              </div>
+              <div style="font-size:.8rem;color:var(--mu);margin-top:10px;text-align:center">⏱️ 3 a 6 meses de proceso</div>
+            </div>
+            <div class="bp-label">Con aire, humedad y tiempo: se crea compost</div>
+            <div class="bp-sub">La materia orgánica se estabiliza y transforma en un material rico en nutrientes</div>
+          </div>
+          <!-- Scene 6 -->
+          <div class="bp-scene" id="bp-s6">
+            <div class="bp-visual">
+              <div class="bp-plant">
+                <div class="bp-plant-grow">🌱</div>
+                <div style="font-size:.85rem;color:var(--mu)">Suelo + Compost = Suelo fértil</div>
+                <div style="font-size:1rem;margin-top:4px">🟫 + 🌍 = 🟤✨</div>
+              </div>
+            </div>
+            <div class="bp-final-msg">El residuo no desapareció: se transformó en un recurso</div>
+            <div class="bp-label" style="color:var(--ac)">El residuo vuelve al suelo como recurso útil</div>
+          </div>
+        </div>
+
+        <div class="bp-ctrls">
+          <button class="btn btn-g" id="bp-prev" onclick="bpPrev()">← Anterior</button>
+          <button class="btn btn-p" id="bp-play" onclick="bpTogglePlay()">▶ Reproducir</button>
+          <button class="btn btn-g" id="bp-next" onclick="bpNext()">Siguiente →</button>
+        </div>
+        <div class="bp-repeat">
+          <button class="btn btn-g" style="font-size:.8rem;padding:7px 14px" onclick="bpRepeat()">↺ Repetir desde el inicio</button>
+        </div>
+      </div>
+
+      <!-- BP Final Question -->
+      <div id="bp-question" hidden>
+        <div class="bp-q-title">🌱 ¿Qué residuo podrías compostar en casa?</div>
+        <div class="bp-q-opts">
+          <button class="bp-qopt" id="bpq-a" onclick="bpAnswer('a')"><span style="font-size:1.3rem">🍊</span> Cáscaras y restos de comida</button>
+          <button class="bp-qopt" id="bpq-b" onclick="bpAnswer('b')"><span style="font-size:1.3rem">🥤</span> Botellas plásticas limpias y secas</button>
+          <button class="bp-qopt" id="bpq-c" onclick="bpAnswer('c')"><span style="font-size:1.3rem">🔋</span> Pilas y medicamentos vencidos</button>
+        </div>
+        <div class="bp-qfb" id="bp-qfb"></div>
+        <div class="bp-alt-route" id="bp-alt" hidden>
+          <h4>🔄 Ruta alternativa: Plásticos</h4>
+          <div class="bp-alt-steps">
+            <span>🥤 Botella</span><span class="bp-alt-arr">→</span><span>🗂️ Clasificación</span><span class="bp-alt-arr">→</span><span>⚙️ Trituración</span><span class="bp-alt-arr">→</span><span>🧹 Lavado</span><span class="bp-alt-arr">→</span><span>🔵 Pellets</span><span class="bp-alt-arr">→</span><span>🆕 Nuevo producto</span>
+          </div>
+        </div>
+        <button class="btn btn-p btn-full" id="bp-cont" disabled onclick="goTo('s-m2');completeModule('bp')" style="margin-top:14px">Continuar al siguiente módulo →</button>
+      </div>
+    </div>
+  </div>
+  <div class="mod-foot">
+    <button class="btn btn-g" onclick="goTo('s-map')">← Mapa</button>
+    <button class="btn btn-p" onclick="goTo('s-m2');completeModule('bp')">Economía Circular →</button>
+  </div>
+</section>
+
+<!-- M2: Economía Circular -->
+<section id="s-m2" class="screen">
+  <div class="scroll"><div class="wrap">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:var(--at)">♻️</div>
+      <div><div class="eyebrow">Módulo 2</div><h2>Economía Circular</h2></div>
+    </div>
+    <div class="voice-bar"><button class="vbtn" onclick="speakNarration('m2')">🔊</button><span>Escuchar explicación del módulo</span></div>
+    <div class="mod-hook">Los materiales no mueren. Pueden volver a empezar.</div>
+    <p style="color:var(--mu);margin-bottom:20px;font-size:.93rem">La economía circular mantiene materiales y productos en uso el mayor tiempo posible, regenera sistemas naturales y elimina residuos por diseño.</p>
+    <div class="act-box">
+      <div class="act-title"><span class="act-lbl">Diagrama</span> El ciclo de los materiales</div>
+      <p style="font-size:.85rem;color:var(--mu);margin-bottom:14px">Haz clic en cada etapa para ver qué ocurre ahí.</p>
+      <div class="ec-diagram">
+        <svg class="ec-svg" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" aria-label="Diagrama de economía circular">
+          <circle cx="160" cy="160" r="58" fill="none" stroke="var(--bo)" stroke-width="2" stroke-dasharray="6 4"/>
+          <text x="160" y="155" text-anchor="middle" font-family="var(--fd)" font-weight="700" font-size="13" fill="var(--ac)">CICLO</text>
+          <text x="160" y="172" text-anchor="middle" font-family="var(--fd)" font-weight="700" font-size="13" fill="var(--ac)">CIRCULAR</text>
+          <!-- 6 nodes -->
+          <g id="ec-n0" onclick="clickNode(0)" style="cursor:pointer"><circle cx="160" cy="52" r="28" fill="var(--at)" stroke="var(--ac)" stroke-width="2"/><text x="160" y="49" text-anchor="middle" font-size="13">✏️</text><text x="160" y="64" text-anchor="middle" font-family="var(--fb)" font-size="8" fill="var(--ac)" font-weight="600">Diseño</text></g>
+          <g id="ec-n1" onclick="clickNode(1)" style="cursor:pointer"><circle cx="268" cy="110" r="28" fill="var(--at)" stroke="var(--ac)" stroke-width="2"/><text x="268" y="107" text-anchor="middle" font-size="13">🏭</text><text x="268" y="122" text-anchor="middle" font-family="var(--fb)" font-size="8" fill="var(--ac)" font-weight="600">Producción</text></g>
+          <g id="ec-n2" onclick="clickNode(2)" style="cursor:pointer"><circle cx="268" cy="210" r="28" fill="var(--bt)" stroke="var(--bl)" stroke-width="2"/><text x="268" y="207" text-anchor="middle" font-size="13">🛒</text><text x="268" y="222" text-anchor="middle" font-family="var(--fb)" font-size="8" fill="var(--bl)" font-weight="600">Uso</text></g>
+          <g id="ec-n3" onclick="clickNode(3)" style="cursor:pointer"><circle cx="160" cy="268" r="28" fill="var(--bt)" stroke="var(--bl)" stroke-width="2"/><text x="160" y="265" text-anchor="middle" font-size="13">🗂️</text><text x="160" y="280" text-anchor="middle" font-family="var(--fb)" font-size="8" fill="var(--bl)" font-weight="600">Recolección</text></g>
+          <g id="ec-n4" onclick="clickNode(4)" style="cursor:pointer"><circle cx="52" cy="210" r="28" fill="var(--gt)" stroke="var(--go)" stroke-width="2"/><text x="52" y="207" text-anchor="middle" font-size="13">⚗️</text><text x="52" y="222" text-anchor="middle" font-family="var(--fb)" font-size="8" fill="var(--go)" font-weight="600">Recuperación</text></g>
+          <g id="ec-n5" onclick="clickNode(5)" style="cursor:pointer"><circle cx="52" cy="110" r="28" fill="var(--gt)" stroke="var(--go)" stroke-width="2"/><text x="52" y="107" text-anchor="middle" font-size="13">🆕</text><text x="52" y="122" text-anchor="middle" font-family="var(--fb)" font-size="8" fill="var(--go)" font-weight="600">Nuevo prod.</text></g>
+          <!-- arrows -->
+          <path d="M182 72 Q230 85 248 92" fill="none" stroke="var(--ac)" stroke-width="2" marker-end="url(#arr)"/>
+          <path d="M268 138 Q268 165 268 182" fill="none" stroke="var(--bl)" stroke-width="2" marker-end="url(#arr)"/>
+          <path d="M248 230 Q210 255 185 258" fill="none" stroke="var(--bl)" stroke-width="2" marker-end="url(#arr)"/>
+          <path d="M135 268 Q90 260 72 240" fill="none" stroke="var(--go)" stroke-width="2" marker-end="url(#arr)"/>
+          <path d="M52 182 Q52 150 52 138" fill="none" stroke="var(--go)" stroke-width="2" marker-end="url(#arr)"/>
+          <path d="M72 100 Q105 80 132 68" fill="none" stroke="var(--ac)" stroke-width="2" marker-end="url(#arr)"/>
+          <defs><marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="var(--mu)"/></marker></defs>
+        </svg>
+      </div>
+      <div class="ec-info" id="ec-info">👆 Haz clic en cualquier nodo del diagrama para ver qué pasa en esa etapa.</div>
+    </div>
+    <div class="card card-el" style="font-size:.88rem;line-height:1.6">
+      <strong>💡 Analogía:</strong> La economía circular es como un juego de mesa que no termina: las piezas siempre vuelven al tablero. En la economía lineal, las piezas se tiran al piso.
+    </div>
+  </div></div>
+  <div class="mod-foot">
+    <button class="btn btn-g" onclick="goTo('s-map')">← Mapa</button>
+    <button class="btn btn-p" onclick="goTo('s-m3');completeModule('m2')">Caracterización →</button>
+  </div>
+</section>
+
+<!-- M3: Caracterización -->
+<section id="s-m3" class="screen">
+  <div class="scroll"><div class="wrap">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:var(--bt)">🔬</div>
+      <div><div class="eyebrow">Módulo 3</div><h2>Caracterización de Residuos</h2></div>
+    </div>
+    <div class="mod-illus">
+      <div class="mod-illus-em">🗑️ → 📊</div>
+      <div class="mod-illus-label">¿Qué hay exactamente en una bolsa de basura?</div>
+    </div>
+    <div class="voice-bar"><button class="vbtn" onclick="speakNarration('m3')">🔊</button><span>Escuchar explicación del módulo</span></div>
+    <div class="mod-hook">Antes de valorizar, necesitamos saber qué hay. La caracterización es el diagnóstico del residuo.</div>
+    <p style="color:var(--mu);margin-bottom:12px;font-size:.93rem">Composición de residuos domiciliarios en Colombia (IDEAM 2023):</p>
+    <div class="bar-chart">
+      <div class="bar-row"><div class="bar-label">🌱 Orgánico</div><div class="bar-track"><div class="bar-fill org" id="b-org" style="width:0%">58%</div></div></div>
+      <div class="bar-row"><div class="bar-label">📰 Papel/Cartón</div><div class="bar-track"><div class="bar-fill pap" id="b-pap" style="width:0%">14%</div></div></div>
+      <div class="bar-row"><div class="bar-label">🥤 Plásticos</div><div class="bar-track"><div class="bar-fill pla" id="b-pla" style="width:0%">12%</div></div></div>
+      <div class="bar-row"><div class="bar-label">🫙 Vidrio/Metal</div><div class="bar-track"><div class="bar-fill vid" id="b-vid" style="width:0%">6%</div></div></div>
+      <div class="bar-row"><div class="bar-label">📦 Otros</div><div class="bar-track"><div class="bar-fill oth" id="b-oth" style="width:0%">10%</div></div></div>
+    </div>
+    <div class="info-grid">
+      <div class="info-card"><h4>¿Por qué caracterizar?</h4><p>Para diseñar sistemas de recolección y tratamiento adecuados. Sin datos, no hay solución técnica.</p></div>
+      <div class="info-card"><h4>Fracción orgánica</h4><p>58% es la mayor fracción. Enorme potencial para compostaje y digestión anaerobia.</p></div>
+      <div class="info-card"><h4>Fracción reciclable</h4><p>Papel + plástico + vidrio/metal = ~32%. Recuperables con separación en la fuente.</p></div>
+      <div class="info-card"><h4>Variación local</h4><p>La composición cambia por estrato socioeconómico, clima y hábitos. ¡Por eso se caracteriza localmente!</p></div>
+    </div>
+    <div class="act-box">
+      <div class="act-title"><span class="act-lbl">Actividad</span> Adivina el porcentaje</div>
+      <p style="font-size:.85rem;color:var(--mu);margin-bottom:14px">Ajusta cada deslizador al porcentaje que crees que tiene ese material en la basura colombiana:</p>
+      <div class="comp-params" id="m3-sliders"></div>
+      <button class="btn btn-p" onclick="checkM3()">Verificar mis estimaciones →</button>
+      <div id="m3-fb" hidden style="margin-top:12px;padding:12px;border-radius:var(--rs);font-size:.87rem;line-height:1.6"></div>
+    </div>
+  </div></div>
+  <div class="mod-foot">
+    <button class="btn btn-g" onclick="goTo('s-map')">← Mapa</button>
+    <button class="btn btn-p" onclick="goTo('s-m4');completeModule('m3')">Procesos Físicos →</button>
+  </div>
+</section>
+
+<!-- M4: Procesos Físicos -->
+<section id="s-m4" class="screen">
+  <div class="scroll"><div class="wrap">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:var(--el)">⚙️</div>
+      <div><div class="eyebrow">Módulo 4</div><h2>Procesos Físicos</h2></div>
+    </div>
+    <div class="mod-illus">
+      <div class="mod-illus-em">⚙️ 🔨 🧲 📦</div>
+      <div class="mod-illus-label">Operaciones unitarias: transformaciones físicas sin cambio químico</div>
+    </div>
+    <div class="voice-bar"><button class="vbtn" onclick="speakNarration('m4')">🔊</button><span>Escuchar explicación del módulo</span></div>
+    <div class="mod-hook">Una operación unitaria cambia la forma o el tamaño del residuo, pero no su estructura química.</div>
+    <div class="tab-row" id="m4-tabs">
+      <button class="tab-btn on" onclick="showTab('m4','tri','m4-tabs')">🔨 Trituración</button>
+      <button class="tab-btn" onclick="showTab('m4','tam','m4-tabs')">🔲 Tamizado</button>
+      <button class="tab-btn" onclick="showTab('m4','mag','m4-tabs')">🧲 Sep. Magnética</button>
+      <button class="tab-btn" onclick="showTab('m4','com','m4-tabs')">📦 Compactación</button>
+    </div>
+    <div id="m4-tri" class="tab-panel on"><div class="card"><div style="font-size:2rem;margin-bottom:10px">🔨 → 🟫🟫🟫</div><h3 style="margin-bottom:8px">Trituración / Molienda</h3><p style="font-size:.88rem;color:var(--mu);line-height:1.6">Reduce el tamaño de los residuos. Facilita el transporte, aumenta la superficie de contacto para procesos posteriores (compostaje, digestión, pirólisis). Trituradores de cuchillas para plásticos; molinos de martillos para residuos de construcción.</p><div class="card-el" style="border-radius:var(--rs);padding:10px;margin-top:10px;font-size:.82rem"><strong>🍫 Analogía:</strong> Partir chocolate: en trozos pequeños se funde más rápido y de forma uniforme.</div></div></div>
+    <div id="m4-tam" class="tab-panel"><div class="card"><div style="font-size:2rem;margin-bottom:10px">🔲 ⬇️ 🔵</div><h3 style="margin-bottom:8px">Tamizado / Cribado</h3><p style="font-size:.88rem;color:var(--mu);line-height:1.6">Separa partículas por tamaño mediante mallas o cribas vibrantes. Separa fracción fina (tierra, compost maduro) de fracción gruesa (plásticos, vidrio, residuos de mayor tamaño) después de la trituración.</p><div class="card-el" style="border-radius:var(--rs);padding:10px;margin-top:10px;font-size:.82rem"><strong>🍚 Analogía:</strong> Colar arroz: el agua y lo fino pasa, el arroz queda retenido.</div></div></div>
+    <div id="m4-mag" class="tab-panel"><div class="card"><div style="font-size:2rem;margin-bottom:10px">🧲 Fe ✅</div><h3 style="margin-bottom:8px">Separación Magnética</h3><p style="font-size:.88rem;color:var(--mu);line-height:1.6">Imanes permanentes o electromagnéticos en bandas transportadoras extraen metales ferrosos (hierro, acero) del flujo de residuos. Los metales recuperados tienen alto valor en el mercado de chatarra y se funden para nuevo acero.</p><div class="card-el" style="border-radius:var(--rs);padding:10px;margin-top:10px;font-size:.82rem"><strong>🔑 Analogía:</strong> Un imán de nevera que solo atrae clips metálicos de entre muchos objetos en una mesa.</div></div></div>
+    <div id="m4-com" class="tab-panel"><div class="card"><div style="font-size:2rem;margin-bottom:10px">📦 → 📏</div><h3 style="margin-bottom:8px">Compactación / Empaque</h3><p style="font-size:.88rem;color:var(--mu);line-height:1.6">Balas de papel, plástico o cartón para envío a recicladores. Reduce volumen hasta 10:1, abaratando el transporte. No cambia la composición química del material, solo su densidad aparente.</p><div class="card-el" style="border-radius:var(--rs);padding:10px;margin-top:10px;font-size:.82rem"><strong>🧳 Analogía:</strong> Comprimir ropa en una maleta con una bolsa de vacío: la misma ropa, mucho menos espacio.</div></div></div>
+    <div class="act-box" style="margin-top:20px">
+      <div class="act-title"><span class="act-lbl">Actividad</span> Proceso ↔ Analogía</div>
+      <p style="font-size:.85rem;color:var(--mu);margin-bottom:12px">Selecciona un proceso (izquierda) y luego su analogía (derecha):</p>
+      <div class="match-wrap">
+        <div class="match-items"><div class="match-col-h">Proceso</div><div id="m4-mitems"></div></div>
+        <div class="match-targets"><div class="match-col-h">Analogía</div><div id="m4-mtargets"></div></div>
+      </div>
+      <div id="m4-mfb" hidden style="margin-top:12px;padding:10px;border-radius:var(--rs);font-size:.85rem"></div>
+    </div>
+  </div></div>
+  <div class="mod-foot">
+    <button class="btn btn-g" onclick="goTo('s-m3')">← Caracterización</button>
+    <button class="btn btn-p" onclick="goTo('s-m5');completeModule('m4')">Procesos Químicos →</button>
+  </div>
+</section>
+
+<!-- M5: Procesos Químicos -->
+<section id="s-m5" class="screen">
+  <div class="scroll"><div class="wrap">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:var(--bt)">🧪</div>
+      <div><div class="eyebrow">Módulo 5</div><h2>Procesos Químicos</h2></div>
+    </div>
+    <div class="mod-illus">
+      <div class="mod-illus-em">🧪 ⚗️ 🔥 ⛽</div>
+      <div class="mod-illus-label">Reacciones que transforman la identidad molecular del residuo</div>
+    </div>
+    <div class="voice-bar"><button class="vbtn" onclick="speakNarration('m5')">🔊</button><span>Escuchar explicación del módulo</span></div>
+    <div class="mod-hook">Un proceso unitario rompe y forma enlaces químicos. El residuo cambia de identidad molecular.</div>
+    <div class="tab-row" id="m5-tabs">
+      <button class="tab-btn on" onclick="showTab('m5','tes','m5-tabs')">🛢️ Transester.</button>
+      <button class="tab-btn" onclick="showTab('m5','pir','m5-tabs')">🔥 Pirólisis</button>
+      <button class="tab-btn" onclick="showTab('m5','hid','m5-tabs')">💧 Hidrólisis</button>
+    </div>
+    <div id="m5-tes" class="tab-panel on"><div class="card"><div style="text-align:center;font-size:1.3rem;padding:10px;background:var(--el);border-radius:var(--rs);margin-bottom:12px">🫙 + 🍺 + ⚗️ &nbsp;→&nbsp; ⛽ + 🧴</div><h3 style="margin-bottom:8px">Transesterificación</h3><p style="font-size:.88rem;color:var(--mu);line-height:1.6"><strong>Reactivos:</strong> Triglicéridos (aceite/grasa) + Metanol + NaOH (catalizador básico)</p><p style="font-size:.88rem;color:var(--mu);line-height:1.6;margin-top:6px"><strong>Productos:</strong> Ésteres de ácidos grasos (Biodiesel) + Glicerol</p><p style="font-size:.88rem;color:var(--mu);line-height:1.6;margin-top:6px"><strong>Condiciones:</strong> 60-65°C · 1 hora · Relación molar aceite:metanol = 1:6</p><div class="card-el" style="border-radius:var(--rs);padding:10px;margin-top:10px;font-size:.82rem"><strong>🇨🇴 Colombia:</strong> ~40 plantas de biodiesel. BioUseite (Bogotá) transforma aceite de cocina usado en biodiesel para buses del SITP.</div></div></div>
+    <div id="m5-pir" class="tab-panel"><div class="card"><div style="text-align:center;font-size:1.3rem;padding:10px;background:var(--el);border-radius:var(--rs);margin-bottom:12px">🌾 + 🔥(sin O₂) &nbsp;→&nbsp; ⬛ + 🛢️ + 💨</div><h3 style="margin-bottom:8px">Pirólisis</h3><p style="font-size:.88rem;color:var(--mu);line-height:1.6"><strong>Proceso:</strong> Descomposición termoquímica a 350-850°C en ausencia de oxígeno</p><p style="font-size:.88rem;color:var(--mu);line-height:1.6;margin-top:6px"><strong>Productos:</strong> Biochar (sólido 25-35%) · Bio-oil (líquido 30-60%) · Syngas (gaseoso 10-30%)</p><p style="font-size:.88rem;color:var(--mu);line-height:1.6;margin-top:6px"><strong>Variantes:</strong> Pirólisis lenta → más biochar · Pirólisis rápida → más bio-oil · Gasificación → más syngas</p><div class="card-el" style="border-radius:var(--rs);padding:10px;margin-top:10px;font-size:.82rem"><strong>🌍 Uso:</strong> El biochar mejora suelos y almacena carbono durante siglos. Es una herramienta de captura de carbono.</div></div></div>
+    <div id="m5-hid" class="tab-panel"><div class="card"><div style="text-align:center;font-size:1.3rem;padding:10px;background:var(--el);border-radius:var(--rs);margin-bottom:12px">🌾 + H₂O + ⚗️ &nbsp;→&nbsp; 🍬🍬 → 🍺 Etanol</div><h3 style="margin-bottom:8px">Hidrólisis Química / Enzimática</h3><p style="font-size:.88rem;color:var(--mu);line-height:1.6"><strong>Proceso:</strong> Ruptura de polímeros (celulosa, almidón) por agua usando ácidos o enzimas</p><p style="font-size:.88rem;color:var(--mu);line-height:1.6;margin-top:6px"><strong>Aplicación:</strong> Residuos lignocelulósicos (bagazo de caña, madera) → hidrólisis → glucosa → fermentación → bioetanol</p><div class="card-el" style="border-radius:var(--rs);padding:10px;margin-top:10px;font-size:.82rem"><strong>🇧🇷 Brasil:</strong> Líder mundial en bioetanol de caña. 1 tonelada de bagazo puede producir hasta 200 litros de etanol.</div></div></div>
+    <div class="act-box" style="margin-top:20px">
+      <div class="act-title"><span class="act-lbl">Actividad</span> Constructor de reacciones</div>
+      <p style="font-size:.85rem;color:var(--mu);margin-bottom:10px">Completa la ecuación de transesterificación. Haz clic en un ficha y luego en el espacio correcto:</p>
+      <div id="m5-react-area"></div>
+      <button class="btn btn-p" onclick="checkM5()" style="margin-top:4px">Verificar ecuación →</button>
+      <div id="m5-fb" hidden style="margin-top:12px;padding:12px;border-radius:var(--rs);font-size:.87rem;line-height:1.6"></div>
+    </div>
+  </div></div>
+  <div class="mod-foot">
+    <button class="btn btn-g" onclick="goTo('s-m4')">← Procesos Físicos</button>
+    <button class="btn btn-p" onclick="goTo('s-m6');completeModule('m5')">Procesos Biológicos →</button>
+  </div>
+</section>
+
+<!-- M6: Procesos Biológicos -->
+<section id="s-m6" class="screen">
+  <div class="scroll"><div class="wrap">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:var(--at)">🌱</div>
+      <div><div class="eyebrow">Módulo 6</div><h2>Procesos Biológicos</h2></div>
+    </div>
+    <div class="mod-illus">
+      <div class="mod-illus-em">🦠 🌿 ♻️</div>
+      <div class="mod-illus-label">La naturaleza hace el trabajo — solo necesita las condiciones correctas</div>
+    </div>
+    <div class="voice-bar"><button class="vbtn" onclick="speakNarration('m6')">🔊</button><span>Escuchar explicación del módulo</span></div>
+    <div class="mod-hook">Los microorganismos son los mejores recicladores. Transforman materia orgánica en recursos valiosos.</div>
+    <div class="tab-row" id="m6-tabs">
+      <button class="tab-btn on" onclick="showTab('m6','comp','m6-tabs')">🌿 Compostaje</button>
+      <button class="tab-btn" onclick="showTab('m6','dana','m6-tabs')">⚗️ Dig. Anaerobia</button>
+    </div>
+    <div id="m6-comp" class="tab-panel on"><div class="card"><div style="text-align:center;font-size:1.3rem;padding:10px;background:var(--el);border-radius:var(--rs);margin-bottom:12px">🍌🥦 + 💨 + 💧 + ⏱️ &nbsp;→&nbsp; 🌍 Compost</div><h3 style="margin-bottom:10px">Compostaje Aerobio</h3><div class="info-grid"><div class="info-card"><h4>🌡️ Fase mesofílica</h4><p>25-40°C. Bacterias iniciales descomponen azúcares y proteínas solubles. Dura días.</p></div><div class="info-card"><h4>🔥 Fase termofílica</h4><p>55-65°C. Mata patógenos y semillas. Bacterias termófilas activas. Dura semanas.</p></div><div class="info-card"><h4>❄️ Maduración</h4><p>Vuelta a 25-30°C. Hongos y actinomicetos estabilizan el compost. 2-4 meses.</p></div></div><p style="font-size:.82rem;color:var(--mu);margin-top:8px"><strong>Parámetros clave:</strong> C:N = 25-30:1 · Humedad 50-60% · Volteo periódico (O₂) · pH 6-8 · Tiempo 3-6 meses</p></div></div>
+    <div id="m6-dana" class="tab-panel"><div class="card"><div style="text-align:center;font-size:1.3rem;padding:10px;background:var(--el);border-radius:var(--rs);margin-bottom:12px">🍌 + 🦠(sin O₂) &nbsp;→&nbsp; 🔥CH₄ (60-70%) + CO₂</div><h3 style="margin-bottom:10px">Digestión Anaerobia</h3><div class="info-grid"><div class="info-card"><h4>1. Hidrólisis</h4><p>Enzimas rompen polímeros en monómeros: azúcares, aminoácidos, ácidos grasos.</p></div><div class="info-card"><h4>2. Acidogénesis</h4><p>Bacterias fermentativas producen ácidos grasos volátiles, alcoholes, H₂ y CO₂.</p></div><div class="info-card"><h4>3. Acetogénesis</h4><p>Producción de ácido acético, H₂ y CO₂ — precursores directos del metano.</p></div><div class="info-card"><h4>4. Metanogénesis</h4><p>Arqueas metanogénicas producen CH₄ (60-70%) y CO₂. ¡Este es el biogás!</p></div></div><p style="font-size:.82rem;color:var(--mu);margin-top:8px"><strong>Productos:</strong> Biogás → electricidad/calor · Digestato → fertilizante líquido rico en N y P</p></div></div>
+    <div class="act-box" style="margin-top:20px">
+      <div class="act-title"><span class="act-lbl">Actividad</span> Configurador de compost</div>
+      <p style="font-size:.85rem;color:var(--mu);margin-bottom:12px">Ajusta los parámetros hasta alcanzar la zona óptima para el compostaje:</p>
+      <div class="comp-params" id="m6-comp-act"></div>
+      <button class="btn btn-p" onclick="checkM6()" style="margin-top:4px">Evaluar condiciones →</button>
+      <div id="m6-fb" hidden style="margin-top:12px;padding:12px;border-radius:var(--rs);font-size:.87rem;line-height:1.6"></div>
+    </div>
+  </div></div>
+  <div class="mod-foot">
+    <button class="btn btn-g" onclick="goTo('s-m5')">← Procesos Químicos</button>
+    <button class="btn btn-p" onclick="goTo('s-m7');completeModule('m6')">Casos Reales →</button>
+  </div>
+</section>
+
+<!-- M7: Casos Reales -->
+<section id="s-m7" class="screen">
+  <div class="scroll"><div class="wrap">
+    <div class="mod-header">
+      <div class="mod-icon" style="background:var(--gt)">🏭</div>
+      <div><div class="eyebrow">Módulo 7</div><h2>Casos Reales</h2></div>
+    </div>
+    <div class="mod-illus">
+      <div class="mod-illus-em">🇨🇴 🌎 ✅</div>
+      <div class="mod-illus-label">Colombia y América Latina donde los residuos ya son recursos reales</div>
+    </div>
+    <div class="voice-bar"><button class="vbtn" onclick="speakNarration('m7')">🔊</button><span>Escuchar explicación del módulo</span></div>
+    <div class="mod-hook">La teoría ya la tienes. Ahora ve cómo funciona en la vida real, a escala industrial.</div>
+    <p style="font-size:.93rem;color:var(--mu);margin-bottom:14px">Haz clic en cada caso para conocer los detalles:</p>
+    <div class="case-grid" id="m7-cases"></div>
+    <div class="act-box" style="margin-top:16px">
+      <div class="act-title"><span class="act-lbl">Actividad</span> Identifica el proceso</div>
+      <p style="font-size:.85rem;color:var(--mu);margin-bottom:12px">Para cada caso, selecciona qué proceso de valorización utilizan:</p>
+      <div id="m7-quiz"></div>
+      <button class="btn btn-p" onclick="checkM7()" style="margin-top:8px">Verificar respuestas →</button>
+      <div id="m7-fb" hidden style="margin-top:12px;padding:12px;border-radius:var(--rs);font-size:.87rem;line-height:1.6"></div>
+    </div>
+  </div></div>
+  <div class="mod-foot">
+    <button class="btn btn-g" onclick="goTo('s-m6')">← Procesos Biológicos</button>
+    <button class="btn btn-p" onclick="goTo('s-challenge');completeModule('m7')">Reto Final →</button>
+  </div>
+</section>
+
+<!-- CHALLENGE -->
+<section id="s-challenge" class="screen">
+  <div class="scroll"><div class="wrap">
+    <div class="eyebrow">Reto Final</div>
+    <h2>Diseña una ruta de valorización</h2>
+    <p style="color:var(--mu);margin:8px 0 16px;font-size:.93rem">Una empresa de alimentos genera estos residuos cada semana. Para cada uno, selecciona la mejor ruta:</p>
+    <div class="ch-wastes" id="ch-wastes">
+      <!-- Generated by JS -->
+    </div>
+    <button class="btn btn-p btn-full" onclick="evaluateChallenge()" style="margin-top:4px">Evaluar mi ruta →</button>
+    <div id="ch-final" hidden style="margin-top:16px;background:var(--at);border-radius:var(--r);padding:18px;text-align:center">
+      <div style="font-size:1.8rem;margin-bottom:8px">🏆</div>
+      <h3 style="color:var(--ac)">¡Reto completado!</h3>
+      <p style="font-size:.88rem;color:var(--mu);margin-top:6px">Ya puedes diseñar rutas básicas de valorización de residuos.</p>
+      <button class="btn btn-p" style="margin-top:14px" onclick="goTo('s-prog');completeModule('challenge')">Ver mi progreso →</button>
+    </div>
+  </div></div>
+  <div class="mod-foot">
+    <button class="btn btn-g" onclick="goTo('s-map')">← Mapa</button>
+    <button class="btn btn-p" onclick="goTo('s-prog')">Mi progreso →</button>
+  </div>
+</section>
+
+<!-- PROGRESS -->
+<section id="s-prog" class="screen">
+  <div class="scroll"><div class="wrap">
+    <h2>Mi progreso</h2>
+    <div class="prog-score">
+      <div class="prog-score-n" id="prog-score-n">0</div>
+      <div class="prog-score-l">puntos acumulados</div>
+    </div>
+    <div class="prog-bar-wrap">
+      <div style="display:flex;justify-content:space-between;font-size:.8rem;color:var(--mu);margin-bottom:6px">
+        <span>Módulos completados</span><span id="prog-mod-txt">0 / 7</span>
+      </div>
+      <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+    </div>
+    <h3 style="margin-bottom:14px">Logros</h3>
+    <div class="ach-grid" id="ach-grid"></div>
+    <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-g" onclick="goTo('s-map')">← Mapa</button>
+      <button class="btn btn-o" onclick="goTo('s-glos')">📖 Glosario</button>
+    </div>
+  </div></div>
+</section>
+
+<!-- ROUTE -->
+<section id="s-ruta" class="screen">
+  <div class="scroll"><div class="wrap">
+    <div class="eyebrow">Caso práctico</div>
+    <h2 id="r-title"></h2>
+    <p id="r-sub" style="color:var(--mu);margin:6px 0 16px;font-size:.9rem"></p>
+    <div style="font-size:.83rem;color:var(--su);margin-bottom:8px" id="r-counter"></div>
+    <div class="card" id="r-card"></div>
+    <div style="display:flex;justify-content:space-between;gap:10px;margin-top:16px;flex-wrap:wrap">
+      <button class="btn btn-g" id="r-prev" onclick="routeMove(-1)">← Anterior</button>
+      <button class="btn btn-p" id="r-next" onclick="routeMove(1)">Siguiente →</button>
+    </div>
+  </div></div>
+  <div class="mod-foot"><button class="btn btn-g" onclick="goTo('s-map')">← Mapa</button></div>
+</section>
+
+<!-- LAB -->
+<section id="s-lab" class="screen">
+  <div class="scroll"><div class="wrap">
+    <div class="eyebrow">Laboratorio virtual</div>
+    <h2>Cambia una variable y observa</h2>
+    <p style="color:var(--mu);margin:6px 0 16px;font-size:.9rem">Es un modelo cualitativo: muestra tendencias, no cifras de diseño.</p>
+    <div id="lab-area"></div>
+    <div style="margin-top:20px"><button class="btn btn-g" onclick="goTo('s-map')">← Mapa</button></div>
+  </div></div>
+</section>
+
+<!-- COMPARATOR -->
+<section id="s-comp" class="screen">
+  <div class="scroll"><div class="wrap">
+    <div class="eyebrow">Comparador</div>
+    <h2>Rutas de valorización</h2>
+    <p style="color:var(--mu);margin:6px 0 16px;font-size:.9rem">Compara qué residuo recibe cada ruta, qué recupera y qué riesgos exige controlar.</p>
+    <div style="overflow-x:auto"><table class="comp-table" id="comp-table"></table></div>
+    <div style="margin-top:20px"><button class="btn btn-g" onclick="goTo('s-map')">← Mapa</button></div>
+  </div></div>
+</section>
+
+<!-- BITÁCORA -->
+<section id="s-bit" class="screen">
+  <div class="scroll"><div class="wrap">
+    <div class="eyebrow">Mi bitácora</div>
+    <h2>Lo que has aprendido</h2>
+    <p style="color:var(--mu);margin:6px 0 16px;font-size:.9rem">Se guarda en este navegador. Puedes copiarla en formato Markdown.</p>
+    <div class="card" id="bit-list" style="margin-bottom:16px"></div>
+    <label for="bit-concl" style="font-weight:600;font-size:.9rem">Mi conclusión</label>
+    <textarea id="bit-concl" rows="3" class="glos-input" style="margin:8px 0 10px"></textarea>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-p" onclick="bitConclusion()">Guardar conclusión</button>
+      <button class="btn btn-g" onclick="bitCopy()">Copiar en Markdown</button>
+    </div>
+    <textarea id="bit-md" readonly rows="8" class="glos-input" style="margin-top:12px;font-family:monospace;font-size:.8rem" hidden></textarea>
+    <div style="margin-top:20px"><button class="btn btn-g" onclick="goTo('s-map')">← Mapa</button></div>
+  </div></div>
+</section>
+
+<!-- GLOSSARY -->
+<section id="s-glos" class="screen">
+  <div class="scroll"><div class="wrap">
+    <h2>Glosario</h2>
+    <p style="color:var(--mu);margin:6px 0 16px;font-size:.9rem">Definiciones simples de los conceptos clave.</p>
+    <div class="glos-search">
+      <input class="glos-input" type="search" placeholder="🔍 Buscar término..." oninput="filterGlossary(this.value)" aria-label="Buscar en el glosario">
+    </div>
+    <div class="glos-list" id="glos-list"></div>
+    <div style="margin-top:20px"><button class="btn btn-g" onclick="goTo('s-map')">← Mapa</button></div>
+  </div></div>
+</section>
+
+</div><!-- /app -->
+
+<script>
+// ===== STATE =====
+const st = {
+  score:0, badges:new Set(), modulesDone:new Set(),
+  quizStep:0, quizScore:0, quizAnswers:[],
+  bpStep:0, bpPlaying:false, bpTimer:null, bpDone:false, bpAnswered:false,
+  m1Selected:null, m1Placed:{}, m1Score:0,
+  challengeDone:false
+};
+
+// ===== DATA =====
+const QUIZ = [
+  {type:'mc',q:'Una empresa implementó diseño sostenible. En vez de aumentar costos, ¿cuánto dinero ahorró?',opts:['$43 millones','$435 millones','$4.350 millones'],ans:1,ok:'¡Exacto! Ford Motor Company ahorró $435 millones. La sostenibilidad bien diseñada no es un costo: es una inversión.',ng:'Es $435 millones. Ford demostró que diseñar pensando en el ambiente desde el inicio genera ahorros reales.',pts:15},
+  {type:'mc',q:'Para fabricar un auto que pesa 3.000 libras, se utilizan aproximadamente:',opts:['3.000 libras de materia prima','15.000 libras de materia prima','50.000 libras de materia prima'],ans:2,ok:'¡Correcto! 50.000 libras para un auto de 3.000. El 94% de los materiales se convierte en residuo durante la fabricación.',ng:'Son 50.000 libras. Eso significa 47.000 libras de residuo solo para fabricar un carro. ¡Ahí está la oportunidad!',pts:15},
+  {type:'mc',q:'"Los residuos son alimento" (Waste = Food) quiere decir:',opts:['Que los residuos orgánicos se pueden comer directamente','Que los residuos de un proceso son materia prima de otro','Que hay que compostar absolutamente todo'],ans:1,ok:'¡Perfecto! La "basura" de un proceso es el "alimento" de otro. Es el corazón de la economía circular.',ng:'La idea es que los residuos de CUALQUIER proceso pueden ser materia prima valiosa para otro. Eso es economía circular.',pts:15},
+  {type:'tf',q:'Las prácticas ambientales siempre cuestan más que los métodos convencionales.',ans:false,ok:'¡Correcto! Ford ahorró $435 millones. Bien diseñadas, las soluciones verdes generan ahorro, no costos.',ng:'¡Falso! Ford ahorró $435 millones con prácticas sostenibles. El techo verde protege la membrana y reduce costos operativos.',pts:10},
+  {type:'mc',q:'¿Qué país declaró la "economía circular" como política nacional?',opts:['Alemania','Brasil','China'],ans:2,ok:'¡Correcto! China adoptó el modelo cuna a cuna como política de Estado, con 400 millones de personas a punto de mudarse a nuevas viviendas.',ng:'Fue China. Con la mayor migración urbana de la historia, adoptó la economía circular para construir ciudades sostenibles.',pts:10},
+  {type:'mc',q:'El techo verde de la fábrica absorbe el agua lluvia naturalmente. ¿Qué evita esto pagar?',opts:['Nuevos materiales de construcción','El tratamiento del agua en una planta química','Los salarios del equipo de mantenimiento'],ans:1,ok:'¡Exacto! Evita enviar el agua lluvia a una planta de tratamiento. "Dejamos que la naturaleza haga lo que sabe hacer."',ng:'Evita el tratamiento del agua lluvia en una planta química, que es costoso y energéticamente intensivo.',pts:10},
+  {type:'order',q:'Ordena los pasos de la economía circular de una botella plástica (haz clic en el orden correcto):',items:['Fabricación','Uso y consumo','Recolección y separación','Transformación','Diseño sostenible','Nuevo producto'],correctOrder:[4,0,1,2,3,5],ok:'¡Perfecto! La economía circular empieza por el diseño, antes de fabricar. ¡Todo comienza antes de que el producto exista!',ng:'La economía circular empieza por el diseño. El orden es: Diseño → Fabricación → Uso → Recolección → Transformación → Nuevo producto.',pts:20},
+  {type:'mc',q:'¿Qué porcentaje de personas comprometidas puede generar cambios grandes?',opts:['1%','5%','10%'],ans:1,ok:'¡Correcto! "Solo el 5% entendía lo que hacíamos, pero cambiaron todo." El cambio no requiere mayorías.',ng:'La respuesta es 5%. Comparó con el perestroika: solo el 5% entendía el cambio, pero fue suficiente para transformarlo todo.',pts:10}
+];
+
+const BADGES = [
+  {id:'video',em:'🎬',nm:'Cazador de Ideas',ds:'Completó el módulo de video'},
+  {id:'thinker',em:'🧠',nm:'Pensador Crítico',ds:'Obtuvo +60 pts en el quiz'},
+  {id:'master',em:'⭐',nm:'Maestro del Quiz',ds:'Obtuvo 100+ pts en el quiz'},
+  {id:'m1',em:'🗂️',nm:'Clasificador Experto',ds:'Completó el módulo 1'},
+  {id:'bp',em:'🎨',nm:'Visualizador',ds:'Completó el módulo Blueprint'},
+  {id:'challenge',em:'🏆',nm:'Experto Valorización',ds:'Completó el reto final'}
+];
+
+const MODULES = [
+  {id:'s-m1',icon:'🗑️',title:'Residuos y Recursos',desc:'Aprende a distinguir residuos y recursos, y clasifica los tipos más comunes.',feat:false,key:'m1'},
+  {id:'s-m2',icon:'♻️',title:'Economía Circular',desc:'Descubre cómo los materiales pueden mantenerse en uso indefinidamente.',feat:false,key:'m2'},
+  {id:'s-bp',icon:'🎬',title:'La Ruta Animada',desc:'Mira cómo un residuo orgánico se convierte en compost paso a paso.',feat:true,key:'bp'},
+  {id:'s-m3',icon:'🔬',title:'Caracterización',desc:'¿Qué hay exactamente en una bolsa de basura doméstica?',feat:false,key:'m3'},
+  {id:'s-m4',icon:'⚙️',title:'Procesos Físicos',desc:'Trituración, tamizado, secado — las operaciones que preparan los residuos.',feat:false,key:'m4'},
+  {id:'s-m5',icon:'🧪',title:'Procesos Químicos',desc:'Transesterificación, pirólisis, hidrólisis — transformar con química.',feat:false,key:'m5'},
+  {id:'s-m6',icon:'🌱',title:'Procesos Biológicos',desc:'Compostaje, digestión anaerobia y bioconversiones naturales.',feat:false,key:'m6'},
+  {id:'s-m7',icon:'🏭',title:'Casos Reales',desc:'Ejemplos de Colombia y América Latina donde los residuos ya son recursos.',feat:false,key:'m7'},
+  {id:'s-challenge',icon:'🏆',title:'Reto Final',desc:'Diseña tu propia ruta de valorización y demuestra lo que aprendiste.',feat:false,key:'challenge'}
+];
+
+const EC_NODES = [
+  {title:'Diseño sostenible',desc:'Se diseña el producto pensando en su fin de vida desde el inicio. Materiales durables, desmontables y recuperables.',eg:'Ejemplo: diseñar zapatillas con adhesivos disolubles para separar suela de tela al final de su vida útil.'},
+  {title:'Producción limpia',desc:'Fabricación que minimiza residuos, usa energías renovables y aplica principios de química verde.',eg:'Ejemplo: Ford redujo contaminantes en su pintura de automóviles usando procesos acuosos en vez de solventes orgánicos.'},
+  {title:'Distribución y uso',desc:'El producto llega al consumidor y cumple su función. El diseño prolonga al máximo esta etapa.',eg:'Ejemplo: productos modularmente reparables duran 3-5 veces más que los convencionales.'},
+  {title:'Recolección y separación',desc:'Al final de la vida útil, los materiales se recogen y separan por tipo para poder recuperarlos.',eg:'Ejemplo: puntos limpios, recolección diferenciada, sistemas de depósito-devolución.'},
+  {title:'Recuperación y transformación',desc:'Los materiales separados se procesan mediante reciclaje físico, químico o biológico para recuperar su valor.',eg:'Ejemplo: una botella PET se tritura, lava y extruye para convertirse en fibra para ropa deportiva.'},
+  {title:'Nuevo producto o material',desc:'Los materiales recuperados entran de nuevo al ciclo como materias primas, cerrando el loop.',eg:'Ejemplo: 10 botellas PET recicladas = fibra para una camiseta de poliéster reciclado.'}
+];
+
+const GLOSSARY = [
+  {t:'Residuo sólido',d:'Material sólido generado por actividades humanas del cual su poseedor se desprende o tiene la intención de desprenderse.'},
+  {t:'Valorización',d:'Proceso por el cual los residuos son aprovechados mediante recuperación de materiales o energía, en vez de ser simplemente eliminados.'},
+  {t:'Economía circular',d:'Modelo económico que mantiene los materiales en uso el mayor tiempo posible, regenera sistemas naturales y elimina residuos por diseño.'},
+  {t:'Compostaje',d:'Proceso biológico aerobio que transforma materia orgánica en compost, un material estabilizado y rico en nutrientes, útil como enmienda del suelo.'},
+  {t:'Digestión anaerobia',d:'Descomposición de materia orgánica por microorganismos en ausencia de oxígeno, produciendo biogás (metano + CO₂) y digestato rico en nutrientes.'},
+  {t:'Biogás',d:'Mezcla de metano (CH₄, 50-70%) y dióxido de carbono (CO₂) producida por digestión anaerobia de materia orgánica. Se usa como combustible o para generar electricidad.'},
+  {t:'Pirólisis',d:'Descomposición termoquímica de materia orgánica a alta temperatura (350-850°C) en ausencia de oxígeno. Produce biochar, bio-oil y gases de síntesis.'},
+  {t:'Transesterificación',d:'Reacción química que convierte triglicéridos (aceites y grasas) en ésteres de ácidos grasos (biodiesel) y glicerol, usando un catalizador básico y un alcohol.'},
+  {t:'Biodiesel',d:'Combustible renovable obtenido por transesterificación de aceites vegetales o grasas animales. Puede usarse puro o mezclado con diésel convencional.'},
+  {t:'Biochar',d:'Carbón vegetal poroso producido por pirólisis lenta de biomasa. Mejora la retención de agua y nutrientes en suelos, y almacena carbono a largo plazo.'},
+  {t:'RAEE',d:'Residuos de Aparatos Eléctricos y Electrónicos. Contienen materiales valiosos (oro, litio, cobre) y sustancias peligrosas. Requieren manejo especializado.'},
+  {t:'Operación unitaria',d:'Transformación exclusivamente física de materiales (trituración, tamizado, secado, filtración) sin que ocurra cambio en su estructura química.'},
+  {t:'Proceso unitario',d:'Transformación química o bioquímica de materiales (oxidación, fermentación, hidrólisis, pirólisis) donde se rompen y forman nuevos enlaces moleculares.'},
+  {t:'Fracción orgánica',d:'Componente biodegradable de los residuos sólidos: restos de alimentos, poda de jardín, madera, papel y otros materiales de origen biológico.'},
+  {t:'Lixiviado',d:'Líquido altamente contaminado que resulta de la percolación de agua a través de residuos sólidos en disposición final. Requiere tratamiento antes de ser liberado.'}
+];
+
+const CH_WASTES = [
+  {em:'🍊',nm:'Cáscaras de fruta',key:'c1',
+    opts:{col:['Recolección separada','Recolección mixta'],proc:['Compostaje','Digestión anaerobia','Reciclaje mecánico','Pirólisis','Incineración'],prod:['Compost/abono','Biogás','Pellets reciclados','Combustible','Energía']},
+    correct:{col:0,proc:0,prod:0},
+    explain:'Las cáscaras de fruta son fracción orgánica. Se recolectan separadas, se compostan y producen compost/abono que mejora suelos.'},
+  {em:'🫙',nm:'Aceite vegetal usado',key:'c2',
+    opts:{col:['Recolección separada','Recolección mixta'],proc:['Compostaje','Transesterificación','Reciclaje mecánico','Pirólisis','Incineración'],prod:['Compost/abono','Biodiesel','Pellets reciclados','Combustible','Energía']},
+    correct:{col:0,proc:1,prod:1},
+    explain:'El aceite usado se recolecta separado, se transesterifica con metanol y produce biodiesel, un combustible renovable.'},
+  {em:'🥤',nm:'Envases plásticos',key:'c3',
+    opts:{col:['Recolección separada','Recolección mixta'],proc:['Compostaje','Digestión anaerobia','Reciclaje mecánico','Pirólisis','Incineración'],prod:['Compost/abono','Biogás','Pellets reciclados','Combustible','Energía']},
+    correct:{col:0,proc:2,prod:2},
+    explain:'Los envases plásticos limpios se recolectan separados, se reciclan mecánicamente (trituración + extrusión) y producen pellets para nuevos productos.'}
+];
+
+// ===== BITÁCORA =====
+function bitLeer(){try{return JSON.parse(localStorage.getItem('drr_bitacora')||'[]')}catch(e){return[]}}
+function bitLog(tipo,detalle){
+  const b=bitLeer();
+  b.push({f:new Date().toLocaleString('es-CO'),tipo,detalle});
+  try{localStorage.setItem('drr_bitacora',JSON.stringify(b))}catch(e){}
+}
+function bitMarkdown(){
+  const lineas=bitLeer().map(e=>`- ${e.f} · ${e.tipo}: ${e.detalle}`);
+  const concl=(localStorage.getItem('drr_conclusion')||'').trim();
+  return `# Bitácora de aprendizaje\n\n## Actividad\n${lineas.join('\n')||'- Sin registros'}\n\n## Conclusión\n${concl||'(pendiente)'}\n`;
+}
+function bitRender(){
+  const b=bitLeer();
+  document.getElementById('bit-list').innerHTML=b.length
+    ?b.slice(-30).reverse().map(e=>`<div style="font-size:.85rem;padding:6px 0;border-bottom:1px solid var(--bo)"><span style="color:var(--su)">${e.f} · ${e.tipo}</span><br>${e.detalle}</div>`).join('')
+    :'<p style="color:var(--mu);font-size:.9rem">Aún no hay registros. Responde una pregunta o usa el laboratorio para empezar.</p>';
+  document.getElementById('bit-concl').value=localStorage.getItem('drr_conclusion')||'';
+}
+function bitConclusion(){
+  const v=document.getElementById('bit-concl').value.trim();
+  try{localStorage.setItem('drr_conclusion',v)}catch(e){}
+  bitLog('conclusión',v||'(vacía)');
+  bitRender();
+  showToast('Conclusión guardada');
+}
+function bitCopy(){
+  const md=bitMarkdown();
+  const ta=document.getElementById('bit-md');
+  ta.hidden=false;
+  ta.value=md;
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(md).then(()=>showToast('Bitácora copiada'),()=>{ta.select();showToast('Selecciona el texto y cópialo')});
+  }else{ta.select();}
+}
+
+// ===== RUTAS DE CASO =====
+const ROUTES={
+  pet:{titulo:'Caso PET · Botellas',sub:'De botella a nuevo material',steps:[
+    {id:'pet_01_contexto',etapa:'1 · Contexto',titulo:'Una tonelada de botellas mezcladas',visual:'🍾🍾🍾🍾 + 🏷️ 🧢 🪨 🧴',texto:'Imagina que recibes una tonelada de botellas PET mezcladas con etiquetas, tapas, tierra y otros plásticos. ¿Por dónde empezarías? Lo primero es entender qué tienes, porque de eso depende toda la ruta de valorización.'},
+    {id:'pet_02_concepto',etapa:'2 · Concepto',titulo:'Un polímero de cadenas largas',visual:'—[PET]—[PET]—[PET]—',texto:'El PET es un polímero formado por cadenas largas de unidades que se repiten. Esas cadenas le dan resistencia y transparencia. Para recuperar su valor, podemos separarlo físicamente, sin cambiar su química, o transformarlo químicamente en sus componentes básicos.'},
+    {id:'pet_03_analogia',etapa:'3 · Analogía',titulo:'Un collar de cuentas',visual:'📿 conservar ↔ 🧵 romper el hilo',texto:'Piensa en un collar de cuentas. El reciclaje mecánico conserva el collar: lo limpias y lo vuelves a fundir. La pirólisis rompe el hilo y recupera las cuentas para fabricar otros productos.'},
+    {id:'pet_04_fisico',etapa:'4 · Proceso físico',titulo:'Separar, triturar, lavar, secar',visual:'🗂️ → ⚙️ → 🧼 → ☀️ → 🔵 hojuelas',texto:'Primero se separan tapas, etiquetas y otros materiales. Luego el PET se tritura, se lava con agua y detergente para quitar restos de comida y pegamento, y se seca. Si entra humedad al extrusor, el polímero se degrada. Por eso el secado es un paso crítico.'},
+    {id:'pet_05_quimico',etapa:'5 · Proceso químico',titulo:'Pirólisis: calor sin oxígeno',visual:'🥤 → [reactor · 400–600 °C · sin O₂] → 🛢️ aceite · ⛽ gas · ⬛ char',texto:'En la pirólisis, el PET se calienta sin oxígeno, normalmente entre cuatrocientos y seiscientos grados Celsius. Las cadenas se rompen y se generan aceite, gas y un sólido carbonoso llamado char.',img:'img/pet_proceso_basico.jpg',alt:'Esquema: botella, cámara con calor, polvo negro y líquido amarillo'},
+    {id:'pet_06_pregunta',etapa:'6 · Pregunta',titulo:'Razona antes de continuar',visual:'🤔',texto:'Antes de continuar, ¿qué crees que pasaría si entra oxígeno al reactor?',pregunta:{pregunta:'¿Qué pasaría si entra oxígeno al reactor?',opts:[{t:'Nada cambia, el oxígeno no importa',ok:false},{t:'Puede ocurrir combustión en lugar de pirólisis',ok:true},{t:'Se producen más hojuelas de PET',ok:false}],fbOk:'¡Exacto! Con oxígeno, el PET se quema en lugar de pirolizarse.',fbNg:'Revisa la respuesta. Escucha la explicación que sigue.',audio:'pet_07_retroalimentacion'}},
+    {id:'pet_08_advertencia',etapa:'7 · Advertencia',titulo:'Ojo con el PVC',visual:'⚠️ PVC + PET → cloro',texto:'Ojo con el PVC. Si se mezcla con el PET, el cloro puede generar compuestos indeseados y afectar la calidad del aceite y las emisiones. Por eso la separación previa importa tanto.'},
+    {id:'pet_09_conexion',etapa:'8 · Decisión ingenieril',titulo:'Ninguna ruta es buena por sí sola',visual:'🧑‍🔬 temperatura · O₂ · humedad · emisiones · calidad',texto:'Un ingeniero ambiental debe controlar temperatura, oxígeno, humedad, contaminantes, emisiones y calidad del producto. Ninguna ruta es buena por sí sola: depende del residuo que tienes y del producto que quieres obtener.'}
+  ]},
+  org:{titulo:'Residuos orgánicos',sub:'Del residuo de cocina al abono o al biogás',steps:[
+    {id:'org_01_contexto',etapa:'1 · Contexto',titulo:'Lo que se tira cada día',visual:'🍌 🥬 🍂 → ¿abono o basura?',texto:'En una cocina se tiran cada día cáscaras, restos de comida y residuos de jardín. En muchas ciudades, más de la mitad de la bolsa de basura es materia orgánica. ¿Qué pasaría si, en vez de enterrarla, la convirtiéramos en abono?'},
+    {id:'org_02_concepto',etapa:'2 · Concepto',titulo:'Materia que los microbios descomponen',visual:'🍌 → 🦠 → 🌱 compost · 🦠 sin O₂ → 🔥 biogás',texto:'La materia orgánica es biodegradable: los microorganismos la pueden descomponer. Según si el proceso ocurre con oxígeno o sin él, obtenemos compost o biogás.'},
+    {id:'org_03_analogia',etapa:'3 · Analogía',titulo:'Como hornear pan',visual:'🥖 mezcla + calor + tiempo',texto:'Compostar es como hornear pan. Necesitas la mezcla correcta, la temperatura adecuada, humedad y tiempo. Si falta algo, el resultado no sale bien.'},
+    {id:'org_04_fisico',etapa:'4 · Proceso físico',titulo:'Separar, triturar, ajustar humedad',visual:'🗂️ → ⚙️ → 💧',texto:'Antes de procesar, el residuo se separa de plásticos y vidrio, se tritura para aumentar el área de contacto y se ajusta la humedad. Entre más pequeñas las partículas, más rápido trabajan los microorganismos.'},
+    {id:'org_05_biologico',etapa:'5 · Proceso biológico',titulo:'Compostaje: calor, oxígeno y tiempo',visual:'55–65 °C · O₂ · 3 a 6 meses',texto:'En el compostaje aerobio, los microorganismos usan oxígeno y generan calor. La pila llega a entre cincuenta y cinco y sesenta y cinco grados Celsius, temperatura que elimina patógenos. Después de tres a seis meses, el material se estabiliza y se convierte en compost.',img:'img/org_proceso_basico.jpg',alt:'Esquema: restos orgánicos, flecha, pila de compost y tierra con brote'},
+    {id:'org_06_pregunta',etapa:'6 · Pregunta',titulo:'Razona antes de continuar',visual:'🥩🧀 + 🏠 compostero casero',texto:'Quieres compostar en casa restos de carne y lácteos sin ningún control. ¿Cuál es el riesgo principal?',pregunta:{pregunta:'¿Cuál es el riesgo de compostar carne y lácteos sin control?',opts:[{t:'Ninguno, todo se descompone igual',ok:false},{t:'Olores y atracción de plagas',ok:true},{t:'Que el compost quede demasiado dulce',ok:false}],fbOk:'¡Correcto! Carne y lácteos se descomponen rápido y pueden generar olores y atraer plagas.',fbNg:'Revisa la respuesta. Escucha la explicación que sigue.',audio:'org_06_retroalimentacion'}},
+    {id:'org_07_biogas',etapa:'7 · Otra ruta',titulo:'Digestión anaerobia: biogás',visual:'🥗 → [digestor sellado] → 🔥 biogás + 🟫 digestato',texto:'Si el mismo residuo entra a un digestor sin oxígeno, ocurre la digestión anaerobia. Produce biogás, una mezcla de metano y dióxido de carbono, y un digestato rico en nutrientes. El metano puede usarse como combustible.'},
+    {id:'org_08_conexion',etapa:'8 · Decisión ingenieril',titulo:'Elegir según el contexto',visual:'🏘️ escala · 💰 inversión · 🛡️ control',texto:'La decisión depende del residuo, la escala y el uso del producto. Un digestor requiere inversión y control constante del proceso. El compostaje es más simple. Tu trabajo como ingeniero es elegir la ruta que funcione en el contexto real.'}
+  ]},
+  bat:{titulo:'Baterías de litio y RAEE',sub:'Del residuo peligroso al metal recuperado',steps:[
+    {id:'bat_01_contexto',etapa:'1 · Contexto',titulo:'Un objeto que guarda metales valiosos',visual:'🔋 litio · cobalto · níquel',texto:'Una batería de litio usada parece un objeto inofensivo, pero guarda metales valiosos como litio, cobalto y níquel. Si se daña, también puede incendiarse. Antes de tocarla, hay que entender qué contiene.'},
+    {id:'bat_02_concepto',etapa:'2 · Concepto',titulo:'Celdas, electrodos y electrolito',visual:'⚡ celda → 🧪 electrolito',texto:'Dentro de una batería hay celdas con electrodos metálicos y un electrolito líquido. Los metales se pueden recuperar, pero el electrolito puede liberar gases tóxicos si se calienta o si se mezcla con agua.'},
+    {id:'bat_03_analogia',etapa:'3 · Analogía',titulo:'Apagar la estufa primero',visual:'🔥 → 🧯 → 🔧',texto:'Piensa en la batería como una estufa con gas encendido. Antes de limpiarla, hay que apagarla y ventilar. Descargar la batería es apagar la estufa.'},
+    {id:'bat_04_seguridad',etapa:'4 · Seguridad',titulo:'Descargar y ventilar antes de tocar',visual:'⚠️ cortocircuito → calor → fuego',texto:'Antes de desmantelar, la batería se descarga por completo y se trabaja en un área ventilada, con equipo de protección. Un cortocircuito puede provocar calentamiento y fuego.'},
+    {id:'bat_05_fisico',etapa:'5 · Proceso físico',titulo:'Desmantelar, triturar, separar',visual:'🔋 → ⚙️ → 🧲 acero · ⚖️ resto',texto:'Se separan las carcasas plásticas y se retiran las celdas. Luego se trituran en condiciones controladas. Después se separan los materiales: el acero se retira con imanes y el resto se separa por densidad.',img:'img/bat_proceso_basico.jpg',alt:'Esquema: batería con rayo tachado, piezas pequeñas y tanque de líquido azul'},
+    {id:'bat_06_quimico',etapa:'6 · Proceso químico',titulo:'Lixiviación y precipitación',visual:'🧪 ácido + agente reductor → sales metálicas',texto:'En la lixiviación, un ácido diluido disuelve los metales, a veces con un agente reductor como el peróxido de hidrógeno. Luego, al ajustar el pH, los metales precipitan como sales que se pueden recuperar.'},
+    {id:'bat_07_pregunta',etapa:'7 · Pregunta',titulo:'Razona antes de desmantelar',visual:'🤔',texto:'¿Por qué las baterías deben descargarse antes de desmantelarlas?',pregunta:{pregunta:'¿Por qué descargar la batería antes de desmantelarla?',opts:[{t:'Para que pesen menos',ok:false},{t:'Para evitar cortocircuitos e incendios',ok:true},{t:'Para que el litio se abarate',ok:false}],fbOk:'¡Exacto! Una batería cargada puede cortocircuitarse durante el desmantelamiento y generar calor y fuego.',fbNg:'Revisa la respuesta. Escucha la explicación que sigue.',audio:'bat_07_retroalimentacion'}},
+    {id:'bat_08_conexion',etapa:'8 · Decisión ingenieril',titulo:'Recuperar valor sin exponer a nadie',visual:'🧑‍🔬 seguridad · metales · efluentes',texto:'Antes de elegir una ruta, un ingeniero pregunta qué metales hay, cuánta energía se gasta, qué residuos peligrosos se generan y quién controla el proceso. Recuperar valor no justifica exponer a personas ni al ambiente.'}
+  ]}
+};
+let rKey='pet',rIdx=0,rAns=false;
+
+function openRoute(k){
+  rKey=k;rIdx=0;
+  bitLog('visita',`Caso: ${ROUTES[k].titulo}`);
+  routeRender();
+  goTo('s-ruta');
+}
+
+function routeRender(){
+  const R=ROUTES[rKey],s=R.steps[rIdx],n=R.steps.length;
+  rAns=false;
+  document.getElementById('r-title').textContent=R.titulo;
+  document.getElementById('r-sub').textContent=R.sub;
+  document.getElementById('r-counter').textContent=`Paso ${rIdx+1} de ${n}`;
+  document.getElementById('r-prev').disabled=rIdx===0;
+  document.getElementById('r-next').textContent=rIdx===n-1?'Fin del caso ✓':'Siguiente →';
+  let html=`<div class="eyebrow">${s.etapa}</div><h3 style="margin-bottom:12px">${s.titulo}</h3>`;
+  if(s.img)html+=`<img src="${s.img}" alt="${s.alt}" style="width:100%;border-radius:var(--rs);margin-bottom:12px">`;
+  html+=`<div style="font-size:1.2rem;text-align:center;padding:16px;background:var(--el);border-radius:var(--rs);margin-bottom:14px;line-height:1.5">${s.visual}</div>
+    <audio controls preload="none" src="audio/${s.id}.mp3" style="width:100%;margin-bottom:12px" aria-label="Audio: ${s.titulo}"></audio>
+    <p style="font-size:.95rem;line-height:1.6">${s.texto}</p>`;
+  if(s.pregunta){
+    html+=`<div style="display:flex;flex-direction:column;gap:8px;margin-top:14px">`;
+    s.pregunta.opts.forEach((o,i)=>{
+      html+=`<button class="btn btn-g btn-full" style="justify-content:flex-start" onclick="routeAnswer(${i})">${o.t}</button>`;
+    });
+    html+=`</div><div id="r-fb" class="q-fb" style="margin-top:12px"></div>`;
+  }
+  document.getElementById('r-card').innerHTML=html;
+}
+
+function routeAnswer(i){
+  if(rAns)return;
+  rAns=true;
+  const R=ROUTES[rKey],q=R.steps[rIdx].pregunta,ok=q.opts[i].ok;
+  bitLog('respuesta',`${R.titulo}: "${q.pregunta}" → ${ok?'acierto':'revisar'}`);
+  const fb=document.getElementById('r-fb');
+  fb.className='q-fb show '+(ok?'ok-fb':'ng-fb');
+  fb.innerHTML=`<div>${ok?q.fbOk:q.fbNg}<audio controls preload="none" src="audio/${q.audio}.mp3" style="width:100%;margin-top:8px"></audio></div>`;
+}
+
+function routeMove(d){
+  const R=ROUTES[rKey],n=R.steps.length;
+  if(rIdx===n-1&&d>0){
+    bitLog('completado',R.titulo);
+    goTo('s-map');
+    return;
+  }
+  rIdx=Math.max(0,Math.min(n-1,rIdx+d));
+  routeRender();
+}
+
+// ===== LABORATORIO =====
+const LAB=[
+  {id:'comp',titulo:'Compostaje',vars:[
+    {id:'hum',label:'Humedad',opts:[['baja','Baja (menor a 40 %)'],['ok','Adecuada (50–60 %)'],['alta','Alta (mayor a 70 %)']]},
+    {id:'temp',label:'Temperatura de la pila',opts:[['baja','Menor a 30 °C'],['ok','55–65 °C'],['alta','Mayor a 70 °C']]},
+    {id:'cn',label:'Relación C:N',opts:[['bajo','Menor a 15:1 (exceso de N)'],['ok','25–30:1'],['alto','Mayor a 40:1 (exceso de C)']]}],
+    notas:v=>[
+      v.hum==='ok'?'Humedad adecuada: hay agua para los microorganismos sin desplazar el oxígeno.':v.hum==='baja'?'Humedad baja: la actividad microbiana se frena. Agrega material húmedo o agua.':'Humedad alta: el agua desplaza el oxígeno y aparecen olores y lixiviados. Agrega material seco, como hojas o cartón.',
+      v.temp==='ok'?'Temperatura termófila: se eliminan patógenos y la descomposición es rápida.':v.temp==='baja'?'Temperatura baja: la pila no llega a la fase termófila y el proceso es lento.':'Temperatura excesiva: los microorganismos mueren y el proceso se detiene. Voltea la pila para airearla.',
+      v.cn==='ok'?'Relación C:N equilibrada: los microorganismos tienen carbono y nitrógeno en proporción.':v.cn==='bajo'?'Exceso de nitrógeno: riesgo de amoníaco y olor. Agrega material con carbono, como hojas secas.':'Exceso de carbono: el proceso es muy lento. Agrega restos verdes con nitrógeno.'],
+    veredicto:v=>(v.hum==='ok'&&v.temp==='ok'&&v.cn==='ok')?'Condiciones viables: el compost debería estabilizarse en unos tres a seis meses.':'Hay variables fuera de rango: el proceso será lento o producirá olores.'},
+  {id:'pir',titulo:'Pirólisis de PET',vars:[
+    {id:'temp',label:'Temperatura del reactor',opts:[['400','400 °C'],['550','550 °C'],['800','800 °C']]},
+    {id:'ox',label:'Oxígeno en el reactor',opts:[['no','Sin oxígeno'],['trazas','Trazas'],['si','Con oxígeno']]}],
+    notas:v=>[
+      v.temp==='400'?'400 °C: la descomposición es lenta y queda más sólido sin convertir.':v.temp==='550'?'550 °C: dentro del rango usual para plásticos. Se obtienen aceite, gas y char en proporciones razonables.':'800 °C: se produce más gas y menos aceite, con mayor consumo de energía.',
+      v.ox==='no'?'Sin oxígeno: el polímero se descompone térmicamente, que es el principio de la pirólisis.':v.ox==='trazas'?'Trazas de oxígeno: pueden oxidar parte del material y alterar la calidad del aceite.':'Con oxígeno: ocurre combustión. Se pierden los productos útiles y aumenta el riesgo de incendio.'],
+    veredicto:v=>(v.ox==='no'&&v.temp==='550')?'Condiciones de pirólisis controladas.':'Revisa las condiciones: no son adecuadas para obtener aceite de forma segura.'}
+];
+
+function labRender(){
+  document.getElementById('lab-area').innerHTML=LAB.map(L=>`
+    <div class="card" style="margin-bottom:16px">
+      <h3 style="margin-bottom:10px">${L.titulo}</h3>
+      ${L.vars.map(v=>`<label for="lab-${L.id}-${v.id}" style="display:block;font-size:.85rem;font-weight:600;margin-bottom:4px">${v.label}</label>
+        <select class="ch-sel" style="margin-bottom:10px" id="lab-${L.id}-${v.id}">${v.opts.map(o=>`<option value="${o[0]}">${o[1]}</option>`).join('')}</select>`).join('')}
+      <button class="btn btn-p btn-full" onclick="labRun('${L.id}')">Observar resultado</button>
+      <div id="lab-out-${L.id}" style="margin-top:12px"></div>
+    </div>`).join('');
+}
+
+function labRun(id){
+  const L=LAB.find(x=>x.id===id);
+  const v={};
+  L.vars.forEach(x=>v[x.id]=document.getElementById(`lab-${id}-${x.id}`).value);
+  const ver=L.veredicto(v);
+  const out=document.getElementById('lab-out-'+id);
+  out.innerHTML=`<ul style="padding-left:18px;font-size:.9rem;line-height:1.6">${L.notas(v).map(n=>`<li>${n}</li>`).join('')}</ul>
+    <div style="margin-top:8px;font-weight:600;color:var(--ac)">${ver}</div>
+    <button class="btn btn-g" style="margin-top:10px" onclick="labSave('${id}')">Guardar en bitácora</button>`;
+  out.dataset.resumen=`${L.titulo}: ${ver}`;
+}
+
+function labSave(id){
+  const out=document.getElementById('lab-out-'+id);
+  if(!out.dataset.resumen)return;
+  bitLog('laboratorio',out.dataset.resumen);
+  showToast('Guardado en bitácora');
+}
+
+// ===== COMPARADOR =====
+const COMP=[
+  {t:'Reciclaje mecánico',res:'Plásticos termoplásticos limpios y separados (PET, PE, PP)',proc:'Físico',req:'Separación, triturado, lavado y secado',ven:'Recupera el material sin cambiar su química',lim:'Pierde calidad en cada ciclo; sensible a la contaminación',rie:'Contaminación cruzada con PVC u orgánicos',prod:'Hojuelas o pellets',mad:'Comercial'},
+  {t:'Compostaje',res:'Restos de comida, poda y residuos vegetales',proc:'Biológico (aerobio)',req:'Triturado, control de humedad y relación C:N',ven:'Bajo costo; produce abono',lim:'Lento (3 a 6 meses); requiere control',rie:'Olores, lixiviados y patógenos si no alcanza temperatura',prod:'Compost',mad:'Comercial'},
+  {t:'Digestión anaerobia',res:'Lodos y restos de comida húmedos',proc:'Biológico (sin oxígeno)',req:'Reactor sellado y dilución',ven:'Produce energía renovable',lim:'Inversión alta; control técnico constante',rie:'Fugas de metano y ácido sulfhídrico',prod:'Biogás y digestato',mad:'Comercial'},
+  {t:'Pirólisis',res:'Plásticos mezclados sin cloro, neumáticos, biomasa seca',proc:'Químico térmico (sin oxígeno)',req:'Secado y separación de PVC',ven:'Convierte residuos no reciclables mecánicamente en aceite, gas y char',lim:'Calidad del aceite variable; requiere purificación',rie:'El PVC libera HCl; emisiones si no hay control de gases',prod:'Aceite, gas y char',mad:'Piloto y comercial limitado'},
+  {t:'Transesterificación',res:'Aceite vegetal usado',proc:'Químico',req:'Filtrado, secado y control de acidez',ven:'Combustible renovable',lim:'Sensible a la acidez del aceite',rie:'Manejo de metanol y álcalis',prod:'Biodiesel y glicerol',mad:'Comercial'},
+  {t:'Lixiviación y recuperación de metales',res:'Baterías de litio y RAEE',proc:'Químico (hidrometalúrgico)',req:'Desmantelamiento seguro y descarga previa',ven:'Recupera metales de alto valor',lim:'Reactivos y efluentes que deben tratarse',rie:'Gases tóxicos y efluentes ácidos',prod:'Sales metálicas',mad:'Piloto y comercial en desarrollo'}
+];
+
+function compRender(){
+  const cab=['Tecnología','Residuo adecuado','Tipo de proceso','Requisitos previos','Ventajas','Limitaciones','Riesgos','Producto','Madurez'];
+  const claves=['t','res','proc','req','ven','lim','rie','prod','mad'];
+  document.getElementById('comp-table').innerHTML=
+    `<thead><tr>${cab.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${COMP.map(f=>`<tr>${claves.map((k,i)=>i===0?`<td><strong>${f[k]}</strong></td>`:`<td>${f[k]}</td>`).join('')}</tr>`).join('')}</tbody>`;
+}
+
+// ===== NAVIGATION =====
+function goTo(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const el=document.getElementById(id);
+  if(el){el.classList.add('active');el.scrollTop=0;window.scrollTo(0,0)}
+  const showHdr=id!=='s-welcome';
+  document.getElementById('hdr').hidden=!showHdr;
+  if(showHdr)updateHeader();
+  saveState();
+}
+
+// ===== HEADER =====
+function updateHeader(){
+  const done=st.modulesDone.size;
+  const total=9;
+  const pct=Math.round(done/total*100);
+  document.getElementById('hdr-fill').style.width=pct+'%';
+  document.getElementById('hdr-prog-label').textContent=`${done} de ${total} módulos`;
+  document.getElementById('hdr-score').textContent=st.score+' pts';
+}
+
+// ===== POINTS & BADGES =====
+function addPoints(n){
+  st.score+=n;
+  document.getElementById('hdr-score').textContent=st.score+' pts';
+  saveState();
+}
+
+function earnBadge(id){
+  if(st.badges.has(id))return;
+  st.badges.add(id);
+  const b=BADGES.find(x=>x.id===id);
+  if(b)showToast(b.em+' Logro: '+b.nm);
+  saveState();
+}
+
+function completeModule(key){
+  if(st.modulesDone.has(key))return;
+  st.modulesDone.add(key);
+  updateHeader();
+  renderMap();
+  if(key==='m1')earnBadge('m1');
+  if(key==='bp'){earnBadge('bp');addPoints(30);}
+  if(key==='challenge')earnBadge('challenge');
+  saveState();
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+// ===== WELCOME COUNTERS =====
+function animateCount(el,target,suffix,dur){
+  let start=null;
+  function step(ts){
+    if(!start)start=ts;
+    const prog=Math.min((ts-start)/dur,1);
+    const val=Math.round(prog*target);
+    el.textContent=val+suffix;
+    if(prog<1)requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function startApp(){
+  goTo('s-video');
+}
+
+// ===== QUIZ =====
+let qOrderSelected=[];let qOrderAnswer=[];
+
+function initQuiz(){
+  st.quizStep=0;st.quizScore=0;st.quizAnswers=[];
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const q=QUIZ[st.quizStep];
+  document.getElementById('q-counter').textContent=`Pregunta ${st.quizStep+1} de 8`;
+  // dots
+  let dots='';
+  for(let i=0;i<8;i++){
+    let cls=i===st.quizStep?'q-dot on':i<st.quizStep?'q-dot done':'q-dot';
+    dots+=`<div class="${cls}"></div>`;
+  }
+  document.getElementById('q-dots').innerHTML=dots;
+  document.getElementById('q-next').hidden=true;
+
+  let html=`<div class="q-card"><div class="q-num">Pregunta ${st.quizStep+1} · ${q.pts} puntos</div><div class="q-text">${q.q}</div>`;
+  if(q.type==='mc'){
+    html+=`<div class="q-opts">`;
+    const letters=['A','B','C'];
+    q.opts.forEach((o,i)=>{
+      html+=`<button class="q-opt" id="qo${i}" onclick="handleAnswer(${i})"><span class="q-let">${letters[i]}</span>${o}</button>`;
+    });
+    html+=`</div>`;
+  }else if(q.type==='tf'){
+    html+=`<div class="tf-row"><button class="tf-btn tv" id="qtv" onclick="handleTF(true)">✅ Verdadero</button><button class="tf-btn fv" id="qtf" onclick="handleTF(false)">❌ Falso</button></div>`;
+  }else if(q.type==='order'){
+    qOrderSelected=[];qOrderAnswer=[];
+    // shuffle display order
+    const shuffled=[...q.items.keys()].sort(()=>Math.random()-.5);
+    html+=`<p style="font-size:.82rem;color:var(--mu);margin-bottom:10px">Haz clic en los pasos EN ORDEN de primero a último:</p>`;
+    html+=`<div class="ord-items">`;
+    shuffled.forEach(i=>{
+      html+=`<div class="ord-item" id="oi${i}" onclick="handleOrderItem(${i})">${q.items[i]}</div>`;
+    });
+    html+=`</div><div style="font-size:.8rem;color:var(--mu);margin:8px 0 6px">Tu secuencia:</div><div class="ord-slots" id="ord-slots">`;
+    for(let i=0;i<q.items.length;i++)html+=`<div class="ord-slot" id="oslot${i}"><span class="ord-sn">${i+1}</span><span id="osl${i}">— haz clic en el orden</span></div>`;
+    html+=`</div>`;
+  }
+  html+=`<div class="q-fb" id="q-fb"></div></div>`;
+  document.getElementById('q-area').innerHTML=html;
+}
+
+function handleAnswer(idx){
+  const q=QUIZ[st.quizStep];
+  if(q.type!=='mc')return;
+  document.querySelectorAll('.q-opt').forEach(b=>{b.disabled=true;b.setAttribute('disabled','')});
+  const correct=idx===q.ans;
+  document.getElementById('qo'+idx).classList.add(correct?'ok':'ng');
+  document.getElementById('qo'+q.ans).classList.add('ok');
+  if(correct){addPoints(q.pts);st.quizScore+=q.pts;}
+  showQFeedback(correct,q);
+  document.getElementById('q-next').hidden=false;
+}
+
+function handleTF(val){
+  const q=QUIZ[st.quizStep];
+  ['qtv','qtf'].forEach(id=>{document.getElementById(id).disabled=true;});
+  const correct=val===q.ans;
+  if(val===true) document.getElementById('qtv').classList.add(correct?'ok':'ng');
+  else document.getElementById('qtf').classList.add(correct?'ok':'ng');
+  document.getElementById(q.ans===true?'qtv':'qtf').classList.add('ok');
+  if(correct){addPoints(q.pts);st.quizScore+=q.pts;}
+  showQFeedback(correct,q);
+  document.getElementById('q-next').hidden=false;
+}
+
+function handleOrderItem(idx){
+  if(qOrderSelected.includes(idx))return;
+  const slot=qOrderSelected.length;
+  qOrderSelected.push(idx);
+  document.getElementById('oi'+idx).classList.add('placed');
+  document.getElementById('osl'+slot).textContent=QUIZ[st.quizStep].items[idx];
+  document.getElementById('oslot'+slot).classList.add('filled');
+  if(qOrderSelected.length===QUIZ[st.quizStep].items.length){
+    // evaluate
+    const q=QUIZ[st.quizStep];
+    const correct=JSON.stringify(qOrderSelected)===JSON.stringify(q.correctOrder);
+    if(correct){addPoints(q.pts);st.quizScore+=q.pts;}
+    showQFeedback(correct,q);
+    document.getElementById('q-next').hidden=false;
+  }
+}
+
+function showQFeedback(correct,q){
+  const fb=document.getElementById('q-fb');
+  fb.textContent=(correct?'✅ ':'❌ ')+(correct?q.ok:q.ng);
+  fb.className='q-fb show '+(correct?'ok-fb':'ng-fb');
+}
+
+function nextQ(){
+  st.quizStep++;
+  if(st.quizStep>=8){showResults();return;}
+  renderQuestion();
+}
+
+function showResults(){
+  goTo('s-result');
+  const pct=st.quizScore/105;
+  const circ=345.6;
+  const offset=circ-(circ*pct);
+  const arc=document.getElementById('ring-arc');
+  arc.style.strokeDashoffset=offset;
+  document.getElementById('ring-num').textContent=st.quizScore;
+  let msg='¡Sigue aprendiendo!',sub='Cada intento es un paso. Revisa el video y los módulos y vuelve a intentarlo.';
+  if(st.quizScore>80){msg='¡Excelente!';sub='Dominaste los conceptos del video. ¡Estás listo para explorar todos los módulos!'}
+  else if(st.quizScore>50){msg='¡Buen intento!';sub='Captaste las ideas principales. Los módulos te ayudarán a profundizar aún más.'}
+  document.getElementById('res-msg').textContent=msg;
+  document.getElementById('res-sub').textContent=sub;
+  // badges
+  if(st.quizScore>=60)earnBadge('thinker');
+  if(st.quizScore>=100)earnBadge('master');
+  let bhtml='';
+  BADGES.filter(b=>st.badges.has(b.id)).forEach(b=>{
+    bhtml+=`<div class="badge-item"><div class="badge-em">${b.em}</div><div class="badge-nm">${b.nm}</div></div>`;
+  });
+  document.getElementById('res-badges').innerHTML=bhtml||'<p style="color:var(--mu);font-size:.85rem">Completa módulos para ganar logros</p>';
+}
+
+// ===== MAP =====
+function renderMap(){
+  let html='';
+  const done=st.modulesDone.size;
+  MODULES.forEach(m=>{
+    const isDone=st.modulesDone.has(m.key);
+    html+=`<div class="map-card${isDone?' done':''}${m.feat?' featured':''}" onclick="goTo('${m.id}')">
+      <div class="map-card-icon">${m.icon}</div>
+      <div class="map-card-title">${m.title}${m.feat?' <span class="new-badge">★ NUEVO</span>':''}</div>
+      <div class="map-card-desc">${m.desc}</div>
+      <button class="btn btn-o" style="font-size:.8rem;padding:7px 14px;margin-top:4px" onclick="event.stopPropagation();goTo('${m.id}')">${isDone?'✅ Repasarlo':'Comenzar →'}</button>
+    </div>`;
+  });
+  document.getElementById('map-grid').innerHTML=html;
+  const pct=Math.round(done/9*100);
+  document.getElementById('map-fill').style.width=pct+'%';
+  document.getElementById('map-prog-txt').textContent=`${done} de 9 módulos completados`;
+}
+
+// ===== M1 CLASSIFY =====
+const CL_ITEMS=[
+  {em:'🍊',nm:'Cáscara de fruta',bin:'org',ok:'¡Correcto! Las cáscaras se pueden compostar.'},
+  {em:'🥤',nm:'Botella PET limpia',bin:'rec',ok:'¡Bien! El PET limpio es 100% reciclable.'},
+  {em:'🔋',nm:'Pila usada',bin:'pel',ok:'¡Correcto! Las pilas tienen metales tóxicos.'},
+  {em:'🍽️',nm:'Restos de comida',bin:'org',ok:'¡Perfecto! Los restos orgánicos van al compostaje.'},
+  {em:'🛞',nm:'Llanta vieja',bin:'esp',ok:'¡Correcto! Las llantas van a gestión especial.'},
+  {em:'📰',nm:'Periódico limpio',bin:'rec',ok:'¡Bien! El papel limpio es fácilmente reciclable.'},
+  {em:'🫙',nm:'Aceite de cocina',bin:'esp',ok:'¡Correcto! El aceite puede convertirse en biodiesel.'},
+  {em:'💊',nm:'Medicamentos vencidos',bin:'pel',ok:'¡Exacto! Los medicamentos son residuos peligrosos.'}
+];
+const CL_BINS=[
+  {id:'org',em:'🌱',nm:'Orgánico'},
+  {id:'rec',em:'♻️',nm:'Reciclable'},
+  {id:'pel',em:'⚠️',nm:'Peligroso'},
+  {id:'esp',em:'🔧',nm:'Especial'}
+];
+
+function initM1(){
+  let ihtml=CL_ITEMS.map((it,i)=>
+    `<div class="cl-item" id="ci${i}" onclick="clSelect(${i})">${it.em} ${it.nm}</div>`
+  ).join('');
+  document.getElementById('cl-items').innerHTML=ihtml;
+  let bhtml=CL_BINS.map(b=>
+    `<div class="cl-bin" id="cb${b.id}" onclick="clDrop('${b.id}')"><div class="cl-bin-h">${b.em} ${b.nm}</div><div class="cl-placed" id="cp${b.id}"></div></div>`
+  ).join('');
+  document.getElementById('cl-bins').innerHTML=bhtml;
+  st.m1Selected=null;st.m1Placed={};st.m1Score=0;
+}
+
+function clSelect(idx){
+  if(document.getElementById('ci'+idx).classList.contains('placed'))return;
+  document.querySelectorAll('.cl-item').forEach(el=>el.classList.remove('sel'));
+  document.getElementById('ci'+idx).classList.add('sel');
+  st.m1Selected=idx;
+}
+
+function clDrop(binId){
+  if(st.m1Selected===null)return;
+  const idx=st.m1Selected;
+  const it=CL_ITEMS[idx];
+  const correct=it.bin===binId;
+  const fb=document.getElementById('cl-fb');
+  fb.textContent=(correct?'✅ ':'❌ ')+(correct?it.ok:`Hmm, ${it.nm} debería ir a "${CL_BINS.find(b=>b.id===it.bin).nm}". ¡Inténtalo de nuevo!`);
+  fb.style.display='block';
+  fb.style.background=correct?'var(--at)':'var(--wt)';
+  fb.style.color=correct?'var(--ac)':'var(--wa)';
+  if(correct){
+    document.getElementById('ci'+idx).classList.add('placed');
+    document.getElementById('ci'+idx).classList.remove('sel');
+    const chip=document.createElement('span');
+    chip.className='cl-chip';chip.textContent=it.em+' '+it.nm;
+    document.getElementById('cp'+binId).appendChild(chip);
+    st.m1Placed[idx]=true;
+    addPoints(5);
+    if(Object.keys(st.m1Placed).length===CL_ITEMS.length){
+      addPoints(20);
+      document.getElementById('cl-done').hidden=false;
+      earnBadge('m1');completeModule('m1');
+    }
+  }
+  st.m1Selected=null;
+  document.querySelectorAll('.cl-item').forEach(el=>el.classList.remove('sel'));
+}
+
+// ===== BLUEPRINT =====
+const BP_STEPS=7;
+
+function initBP(){
+  let dots='';
+  for(let i=0;i<BP_STEPS;i++)dots+=`<div class="bp-dot${i===0?' on':''}" onclick="bpGoTo(${i})"></div>`;
+  document.getElementById('bp-dots').innerHTML=dots;
+  bpRender();
+}
+
+function bpRender(){
+  const step=st.bpStep;
+  document.getElementById('bp-num').textContent=step+1;
+  document.querySelectorAll('.bp-scene').forEach((s,i)=>{
+    s.classList.toggle('on',i===step);
+  });
+  document.querySelectorAll('.bp-dot').forEach((d,i)=>{
+    d.className='bp-dot'+(i===step?' on':i<step?' done':'');
+  });
+  document.getElementById('bp-prev').disabled=step===0;
+  document.getElementById('bp-next').disabled=step===BP_STEPS-1;
+  if(step===BP_STEPS-1&&!st.bpDone){
+    st.bpDone=true;
+    document.getElementById('bp-question').hidden=false;
+  }
+}
+
+function bpNext(){
+  if(st.bpStep<BP_STEPS-1){st.bpStep++;bpRender();}
+}
+function bpPrev(){if(st.bpStep>0){st.bpStep--;bpRender();}}
+function bpGoTo(i){st.bpStep=i;bpRender();}
+
+function bpTogglePlay(){
+  st.bpPlaying=!st.bpPlaying;
+  const btn=document.getElementById('bp-play');
+  if(st.bpPlaying){
+    btn.textContent='⏸ Pausar';
+    st.bpTimer=setInterval(()=>{
+      if(st.bpStep<BP_STEPS-1){st.bpStep++;bpRender();}
+      else{bpPause();}
+    },5000);
+  }else{bpPause();}
+}
+
+function bpPause(){
+  st.bpPlaying=false;
+  clearInterval(st.bpTimer);
+  document.getElementById('bp-play').textContent='▶ Reproducir';
+}
+
+function bpRepeat(){
+  bpPause();
+  st.bpStep=0;st.bpDone=false;
+  document.getElementById('bp-question').hidden=true;
+  bpRender();
+}
+
+function bpAnswer(opt){
+  if(st.bpAnswered)return;
+  st.bpAnswered=true;
+  ['a','b','c'].forEach(o=>document.getElementById('bpq-'+o).disabled=true);
+  const correct=opt==='a';
+  document.getElementById('bpq-'+opt).classList.add(correct?'ok':'ng');
+  const msgs={
+    a:'¡Exacto! Los residuos orgánicos son perfectos para compostar. ¡En tu casa podrías hacer compost con cáscaras, restos de fruta y poda de jardín!',
+    b:'Las botellas plásticas limpias van al reciclaje, no al compost. ¡Pero igual son valiosas! Pueden convertirse en fibra textil, mobiliario o nuevas botellas.',
+    c:'⚠️ Las pilas y medicamentos son residuos peligrosos. Nunca al compost ni a la basura ordinaria. Llévelos a puntos de recolección especiales.'
+  };
+  const fb=document.getElementById('bp-qfb');
+  fb.textContent=(correct?'✅ ':'ℹ️ ')+msgs[opt];
+  fb.className='bp-qfb show '+(correct?'ok-fb':'ng-fb');
+  if(correct)addPoints(10);
+  document.getElementById('bp-alt').hidden=false;
+  document.getElementById('bp-cont').disabled=false;
+}
+
+// ===== EC DIAGRAM =====
+function clickNode(idx){
+  const n=EC_NODES[idx];
+  document.getElementById('ec-info').innerHTML=`<strong>${n.title}</strong><br>${n.desc}<br><br><em style="color:var(--ac)">${n.eg}</em>`;
+}
+
+// ===== CHALLENGE =====
+function initChallenge(){
+  let html='';
+  CH_WASTES.forEach(w=>{
+    html+=`<div class="ch-waste">
+      <div class="ch-waste-h"><span class="ch-waste-em">${w.em}</span><span class="ch-waste-nm">${w.nm}</span></div>
+      <div class="ch-row"><div class="ch-label">Método de recolección:</div>
+        <select class="ch-sel" id="${w.key}-col">${w.opts.col.map(o=>`<option>${o}</option>`).join('')}</select></div>
+      <div class="ch-row"><div class="ch-label">Proceso de valorización:</div>
+        <select class="ch-sel" id="${w.key}-proc">${w.opts.proc.map(o=>`<option>${o}</option>`).join('')}</select></div>
+      <div class="ch-row"><div class="ch-label">Producto obtenido:</div>
+        <select class="ch-sel" id="${w.key}-prod">${w.opts.prod.map(o=>`<option>${o}</option>`).join('')}</select></div>
+      <div class="ch-result" id="${w.key}-res"></div>
+    </div>`;
+  });
+  document.getElementById('ch-wastes').innerHTML=html;
+}
+
+function evaluateChallenge(){
+  let totalPts=0;
+  CH_WASTES.forEach(w=>{
+    const colSel=document.getElementById(w.key+'-col').selectedIndex;
+    const procSel=document.getElementById(w.key+'-proc').selectedIndex;
+    const prodSel=document.getElementById(w.key+'-prod').selectedIndex;
+    const ok=colSel===w.correct.col&&procSel===w.correct.proc&&prodSel===w.correct.prod;
+    const res=document.getElementById(w.key+'-res');
+    if(ok){res.textContent='✅ ¡Ruta correcta! '+w.explain;res.className='ch-result ok';totalPts+=30;}
+    else{res.textContent='❌ No exactamente. '+w.explain;res.className='ch-result ng';}
+  });
+  addPoints(totalPts);
+  document.getElementById('ch-final').hidden=false;
+  earnBadge('challenge');completeModule('challenge');
+}
+
+// ===== PROGRESS PAGE =====
+function renderProgress(){
+  document.getElementById('prog-score-n').textContent=st.score;
+  const done=st.modulesDone.size;
+  const pct=Math.round(done/9*100);
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-mod-txt').textContent=`${done} / 9`;
+  let ahtml='';
+  BADGES.forEach(b=>{
+    const earned=st.badges.has(b.id);
+    ahtml+=`<div class="ach-card${earned?' earned':' locked'}"><div class="ach-em">${b.em}</div><div class="ach-nm">${b.nm}</div><div class="ach-ds">${b.ds}</div></div>`;
+  });
+  document.getElementById('ach-grid').innerHTML=ahtml;
+}
+
+// ===== GLOSSARY =====
+function renderGlossary(filter=''){
+  const lc=filter.toLowerCase();
+  const items=GLOSSARY.filter(g=>!lc||g.t.toLowerCase().includes(lc)||g.d.toLowerCase().includes(lc));
+  document.getElementById('glos-list').innerHTML=items.map((g,i)=>`
+    <div class="glos-item">
+      <div class="glos-term" onclick="toggleGlos(this)">${g.t}<span style="color:var(--su)">▾</span></div>
+      <div class="glos-def">${g.d}</div>
+    </div>`).join('');
+}
+
+function filterGlossary(q){renderGlossary(q);}
+function toggleGlos(el){
+  const def=el.nextElementSibling;
+  def.classList.toggle('open');
+}
+
+
+let narrAudio=null;
+
+function speakNarration(key){
+  if(narrAudio)narrAudio.pause();
+  narrAudio=new Audio(`audio/mod_${key}.mp3`);
+  narrAudio.play().catch(()=>showToast('No se pudo reproducir el audio'));
+}
+
+// ===== TABS =====
+function showTab(prefix,tab,tabsId,callerBtn){
+  // hide all panels for this prefix
+  document.querySelectorAll(`[id^="${prefix}-"].tab-panel`).forEach(p=>p.classList.remove('on'));
+  const panel=document.getElementById(`${prefix}-${tab}`);
+  if(panel)panel.classList.add('on');
+  // update tab buttons
+  if(tabsId){
+    const row=document.getElementById(tabsId);
+    if(row){
+      row.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('on'));
+      // find the button that called showTab via onclick attribute match
+      row.querySelectorAll('.tab-btn').forEach(b=>{
+        if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes(`'${tab}'`))b.classList.add('on');
+      });
+    }
+  }
+}
+
+// ===== M3 SLIDERS =====
+const M3_REAL={org:58,pap:14,pla:12,vid:6,oth:10};
+function initM3(){
+  const sliders=[
+    {id:'org',label:'🌱 Orgánico',unit:'%'},
+    {id:'pap',label:'📰 Papel/Cartón',unit:'%'},
+    {id:'pla',label:'🥤 Plásticos',unit:'%'}
+  ];
+  document.getElementById('m3-sliders').innerHTML=sliders.map(s=>`
+    <div class="comp-gauge">
+      <div class="comp-range">
+        <span style="flex:1">${s.label}</span>
+        <span class="comp-val" id="sv-${s.id}">30%</span>
+      </div>
+      <input type="range" min="0" max="80" value="30" oninput="document.getElementById('sv-${s.id}').textContent=this.value+'%'" id="sl-${s.id}" style="width:100%;accent-color:var(--ac);margin-top:6px">
+    </div>`).join('');
+  // animate bars
+  setTimeout(()=>{
+    const vals={org:58,pap:14,pla:12,vid:6,oth:10};
+    Object.entries(vals).forEach(([k,v])=>{
+      const el=document.getElementById('b-'+k);
+      if(el)el.style.width=v+'%';
+    });
+  },300);
+}
+
+function checkM3(){
+  const ids=['org','pap','pla'];
+  const labels={org:'Orgánico (58%)',pap:'Papel/Cartón (14%)',pla:'Plásticos (12%)'};
+  let msgs=[];let pts=0;
+  ids.forEach(id=>{
+    const val=parseInt(document.getElementById('sl-'+id).value);
+    const real=M3_REAL[id];
+    const diff=Math.abs(val-real);
+    if(diff<=5){msgs.push(`✅ ${labels[id]}: ¡Muy cerca! Dijiste ${val}%, real ${real}%.`);pts+=10;}
+    else if(diff<=15){msgs.push(`🟡 ${labels[id]}: Dijiste ${val}%, real ${real}%. ¡Razonable!`);pts+=5;}
+    else{msgs.push(`❌ ${labels[id]}: Dijiste ${val}%, real ${real}%. La diferencia es grande.`);}
+  });
+  if(pts>0)addPoints(pts);
+  const fb=document.getElementById('m3-fb');
+  fb.innerHTML=msgs.join('<br>')+`<br><br><strong>💡 Dato clave:</strong> El 58% orgánico es la mayor oportunidad de valorización. ¡Casi 6 de cada 10 kg de basura puede convertirse en compost o biogás!`;
+  fb.style.background=pts>=20?'var(--at)':pts>=10?'var(--gt)':'var(--wt)';
+  fb.style.color=pts>=20?'var(--ac)':pts>=10?'var(--go)':'var(--wa)';
+  fb.hidden=false;
+}
+
+// ===== M4 MATCH =====
+const M4_PAIRS=[
+  {proc:'🔨 Trituración',analog:'Partir chocolate en trozos pequeños'},
+  {proc:'🔲 Tamizado',analog:'Colar arroz con un colador'},
+  {proc:'🧲 Sep. Magnética',analog:'Imán atrayendo clips de una mesa'},
+  {proc:'📦 Compactación',analog:'Comprimir ropa con bolsa de vacío'}
+];
+let m4Sel=null;
+let m4Done={};
+
+function initM4(){
+  const shuffledA=[...M4_PAIRS.keys()].sort(()=>Math.random()-.5);
+  const shuffledB=[...M4_PAIRS.keys()].sort(()=>Math.random()-.5);
+  document.getElementById('m4-mitems').innerHTML=shuffledA.map(i=>
+    `<div class="match-item" id="mitem-${i}" onclick="m4SelectItem(${i})">${M4_PAIRS[i].proc}</div>`
+  ).join('');
+  document.getElementById('m4-mtargets').innerHTML=shuffledB.map(i=>
+    `<div class="match-target" id="mtgt-${i}" onclick="m4DropTarget(${i})" data-idx="${i}">${M4_PAIRS[i].analog}</div>`
+  ).join('');
+  m4Sel=null;m4Done={};
+}
+
+function m4SelectItem(i){
+  if(document.getElementById('mitem-'+i).classList.contains('placed'))return;
+  document.querySelectorAll('.match-item').forEach(el=>el.classList.remove('sel'));
+  document.getElementById('mitem-'+i).classList.add('sel');
+  m4Sel=i;
+}
+
+function m4DropTarget(ti){
+  if(m4Sel===null)return;
+  const correct=m4Sel===ti;
+  const tgt=document.getElementById('mtgt-'+ti);
+  tgt.classList.add('filled');
+  tgt.classList.add(correct?'ok':'ng');
+  if(correct){
+    document.getElementById('mitem-'+m4Sel).classList.add('placed');
+    m4Done[m4Sel]=true;
+    addPoints(5);
+    if(Object.keys(m4Done).length===M4_PAIRS.length){
+      const fb=document.getElementById('m4-mfb');
+      fb.textContent='🎉 ¡Perfecto! Emparejaste todos los procesos con sus analogías. Los procesos físicos no cambian la química, solo la forma.';
+      fb.style.background='var(--at)';fb.style.color='var(--ac)';
+      fb.hidden=false;addPoints(10);
+    }
+  }else{
+    setTimeout(()=>{tgt.classList.remove('ng','filled');},900);
+    const fb=document.getElementById('m4-mfb');
+    fb.textContent='❌ Esa analogía no corresponde. Piensa en qué hace cada proceso con el material.';
+    fb.style.background='var(--wt)';fb.style.color='var(--wa)';
+    fb.hidden=false;
+  }
+  document.querySelectorAll('.match-item').forEach(el=>el.classList.remove('sel'));
+  m4Sel=null;
+}
+
+// ===== M5 REACTION BUILDER =====
+const REACT_TOKENS=['🫙 Aceite vegetal','🍺 Metanol','⚗️ NaOH','⛽ Biodiesel','🧴 Glicerol','💧 H₂O','💨 CO₂','⬛ Biochar'];
+const REACT_CORRECT=['🫙 Aceite vegetal','🍺 Metanol','⚗️ NaOH','⛽ Biodiesel','🧴 Glicerol'];
+let m5Slots={};let m5TokenSel=null;
+
+function initM5(){
+  const html=`
+    <div class="react-eq">
+      <div class="react-slot" id="rs0" onclick="m5PlaceToken(0)">Reactivo 1</div>
+      <span class="react-op">+</span>
+      <div class="react-slot" id="rs1" onclick="m5PlaceToken(1)">Reactivo 2</div>
+      <span class="react-op">+</span>
+      <div class="react-slot" id="rs2" onclick="m5PlaceToken(2)">Catalizador</div>
+      <span class="react-op">→</span>
+      <div class="react-slot" id="rs3" onclick="m5PlaceToken(3)">Producto 1</div>
+      <span class="react-op">+</span>
+      <div class="react-slot" id="rs4" onclick="m5PlaceToken(4)">Producto 2</div>
+    </div>
+    <p style="font-size:.8rem;color:var(--mu);margin-bottom:8px">Fichas disponibles (haz clic para seleccionar y luego en un espacio):</p>
+    <div class="react-tokens" id="m5-tokens">
+      ${REACT_TOKENS.map((t,i)=>`<button class="react-token" id="rt${i}" onclick="m5SelectToken(${i})">${t}</button>`).join('')}
+    </div>`;
+  document.getElementById('m5-react-area').innerHTML=html;
+  m5Slots={};m5TokenSel=null;
+}
+
+function m5SelectToken(i){
+  document.querySelectorAll('.react-token').forEach(el=>el.classList.remove('sel'));
+  if(!document.getElementById('rt'+i).classList.contains('placed')){
+    document.getElementById('rt'+i).classList.add('sel');
+    m5TokenSel=i;
+  }
+}
+
+function m5PlaceToken(slot){
+  if(m5TokenSel===null)return;
+  const token=REACT_TOKENS[m5TokenSel];
+  m5Slots[slot]=token;
+  const slotEl=document.getElementById('rs'+slot);
+  slotEl.textContent=token;
+  slotEl.classList.add('filled');
+  document.getElementById('rt'+m5TokenSel).classList.add('placed');
+  document.querySelectorAll('.react-token').forEach(el=>el.classList.remove('sel'));
+  m5TokenSel=null;
+}
+
+function checkM5(){
+  const slotKeys=[0,1,2,3,4];
+  let correct=0;
+  slotKeys.forEach(s=>{
+    const expected=REACT_CORRECT[s];
+    if(m5Slots[s]===expected)correct++;
+  });
+  const fb=document.getElementById('m5-fb');
+  if(correct===5){
+    fb.innerHTML='✅ ¡Ecuación perfecta! <strong>Aceite + Metanol + NaOH → Biodiesel + Glicerol</strong>. Los triglicéridos reaccionan con el metanol, el NaOH actúa como catalizador básico, y se obtiene biodiesel y glicerol como subproducto.';
+    fb.style.background='var(--at)';fb.style.color='var(--ac)';
+    addPoints(20);
+  }else{
+    fb.innerHTML=`❌ ${correct} de 5 correctos. Revisa: Reactivos son el aceite y el metanol. El catalizador es NaOH. Los productos son biodiesel y glicerol.`;
+    fb.style.background='var(--wt)';fb.style.color='var(--wa)';
+  }
+  fb.hidden=false;
+}
+
+// ===== M6 COMPOST =====
+function initM6(){
+  const params=[
+    {id:'cn',label:'Relación C:N',min:5,max:60,val:20,unit:':1',opt:'25-30'},
+    {id:'hum',label:'Humedad',min:10,max:90,val:40,unit:'%',opt:'50-60%'},
+    {id:'temp',label:'Temperatura',min:15,max:80,val:35,unit:'°C',opt:'55-65°C'}
+  ];
+  document.getElementById('m6-comp-act').innerHTML=params.map(p=>`
+    <div class="comp-gauge">
+      <div class="comp-range">
+        <span style="flex:1">${p.label}</span>
+        <span class="comp-val" id="cv-${p.id}">${p.val}${p.unit}</span>
+      </div>
+      <input type="range" min="${p.min}" max="${p.max}" value="${p.val}" id="cr-${p.id}"
+        oninput="document.getElementById('cv-${p.id}').textContent=this.value+'${p.unit}'"
+        style="width:100%;accent-color:var(--ac);margin-top:6px">
+      <div style="font-size:.72rem;color:var(--su);margin-top:3px">Óptimo: ${p.opt}</div>
+    </div>`).join('');
+}
+
+function checkM6(){
+  const cn=parseInt(document.getElementById('cr-cn').value);
+  const hum=parseInt(document.getElementById('cr-hum').value);
+  const temp=parseInt(document.getElementById('cr-temp').value);
+  const cnOk=cn>=25&&cn<=30;
+  const humOk=hum>=50&&hum<=60;
+  const tempOk=temp>=55&&temp<=65;
+  const score=(cnOk?1:0)+(humOk?1:0)+(tempOk?1:0);
+  const fb=document.getElementById('m6-fb');
+  const lines=[
+    (cnOk?'✅':'❌')+` C:N = ${cn}:1 ${cnOk?'(óptimo ✓)':'— fuera del rango 25-30:1. Ajusta la mezcla de residuos orgánicos (C) y nitrógeno (N).'}`,
+    (humOk?'✅':'❌')+` Humedad = ${hum}% ${humOk?'(óptimo ✓)':'— fuera del rango 50-60%. '+( hum<50?'Añade agua.':'Voltea más para airear.')}`,
+    (tempOk?'✅':'❌')+` Temperatura = ${temp}°C ${tempOk?'(fase termofílica óptima ✓)':'— '+( temp<55?'Muy baja: aumenta la actividad microbiana (voltear, añadir nitrógeno).':'Muy alta: voltear para liberar calor.')}`
+  ];
+  fb.innerHTML=lines.join('<br>')+`<br><br>${score===3?'🎉 ¡Condiciones perfectas! Tu pila de compost funcionará óptimamente.':'💡 Ajusta los parámetros que están en rojo para optimizar el proceso.'}`;
+  fb.style.background=score===3?'var(--at)':score>=2?'var(--gt)':'var(--wt)';
+  fb.style.color=score===3?'var(--ac)':score>=2?'var(--go)':'var(--wa)';
+  fb.hidden=false;
+  if(score===3)addPoints(15);
+  else if(score>=2)addPoints(5);
+}
+
+// ===== M7 CASES =====
+const M7_CASES=[
+  {em:'⚡',title:'Relleno Doña Juana',loc:'Bogotá, Colombia',proc:'Digestión anaerobia',
+   detail:'El relleno sanitario Doña Juana captura el biogás producido por la descomposición anaerobia de los residuos enterrados. Con ~1.600 m³/h de biogás capturado, genera electricidad para ~8.000 hogares bogotanos. Es el proyecto de aprovechamiento de biogás de relleno más grande de Colombia.'},
+  {em:'🌸',title:'ECOFLORES',loc:'Rionegro, Antioquia',proc:'Compostaje',
+   detail:'La empresa ECOFLORES, en la región floricultura de Rionegro, composita los tallos, hojas y flores de rechazo de las exportaciones de flores. Produce compost certificado que se vende a agricultores de la región. Convierte un residuo problemático (flores con pesticidas) en abono mediante compostaje controlado.'},
+  {em:'♻️',title:'Cooperativas de Recicladores',loc:'Brasil y Colombia',proc:'Reciclaje mecánico',
+   detail:'En Brasil, más de 1.000 cooperativas de recicladores formalizan la separación y venta de materiales reciclables: papel, plástico, aluminio, vidrio. En Bogotá, la Ruta del Reciclaje integra recicladores de oficio al sistema formal. Cada reciclador recupera en promedio 1.500 kg/mes de materiales.'},
+  {em:'⛽',title:'BioUseite',loc:'Bogotá, Colombia',proc:'Transesterificación',
+   detail:'BioUseite recolecta aceite de cocina usado en restaurantes y hogares de Bogotá. Mediante transesterificación con metanol y NaOH, lo convierte en biodiesel que se usa mezclado en buses del sistema SITP. Evita que el aceite llegue a alcantarillas o aguas (un litro de aceite contamina 1.000 litros de agua).'}
+];
+
+let m7QSel={};
+
+function initM7(){
+  document.getElementById('m7-cases').innerHTML=M7_CASES.map((c,i)=>`
+    <div class="case-card" id="cc${i}" onclick="toggleCase(${i})">
+      <div class="case-em">${c.em}</div>
+      <div class="case-title">${c.title}</div>
+      <div class="case-loc">📍 ${c.loc}</div>
+      <div class="case-detail" id="cd${i}">${c.detail}</div>
+    </div>`).join('');
+  const procs=['Digestión anaerobia','Compostaje','Reciclaje mecánico','Transesterificación'];
+  document.getElementById('m7-quiz').innerHTML=M7_CASES.map((c,i)=>`
+    <div class="m7-q">
+      <div class="m7-q-txt">${c.em} ${c.title} usa:</div>
+      <div class="m7-opts" id="m7o${i}">
+        ${procs.map(p=>`<button class="m7-opt" onclick="m7Select(${i},'${p}')">${p}</button>`).join('')}
+      </div>
+    </div>`).join('');
+  m7QSel={};
+}
+
+function toggleCase(i){
+  const card=document.getElementById('cc'+i);
+  const det=document.getElementById('cd'+i);
+  const isOpen=det.classList.contains('open');
+  document.querySelectorAll('.case-detail').forEach(d=>d.classList.remove('open'));
+  document.querySelectorAll('.case-card').forEach(c=>c.classList.remove('open'));
+  if(!isOpen){det.classList.add('open');card.classList.add('open');}
+}
+
+function m7Select(i,proc){
+  m7QSel[i]=proc;
+  document.querySelectorAll(`#m7o${i} .m7-opt`).forEach(b=>{b.classList.remove('sel');b.disabled=false;});
+  const btns=document.querySelectorAll(`#m7o${i} .m7-opt`);
+  btns.forEach(b=>{if(b.textContent===proc)b.classList.add('sel');});
+}
+
+function checkM7(){
+  let pts=0;let msgs=[];
+  M7_CASES.forEach((c,i)=>{
+    const sel=m7QSel[i];
+    const ok=sel===c.proc;
+    const btns=document.querySelectorAll(`#m7o${i} .m7-opt`);
+    btns.forEach(b=>{
+      b.disabled=true;
+      if(b.textContent===c.proc)b.classList.add('ok');
+      else if(b.textContent===sel&&!ok)b.classList.add('ng');
+    });
+    msgs.push((ok?'✅':'❌')+` ${c.em} ${c.title}: ${c.proc}`);
+    if(ok)pts+=10;
+  });
+  addPoints(pts);
+  const fb=document.getElementById('m7-fb');
+  fb.innerHTML=msgs.join('<br>')+`<br><br>${pts===40?'🏆 ¡Perfecto! Identificaste todos los procesos correctamente.':'💡 Revisa los casos que fallaste. Recuerda: orgánico + oxígeno = compostaje; orgánico sin oxígeno = digestión anaerobia; aceite + metanol = transesterificación; plástico/papel = reciclaje mecánico.'}`;
+  fb.style.background=pts>=30?'var(--at)':pts>=20?'var(--gt)':'var(--wt)';
+  fb.style.color=pts>=30?'var(--ac)':pts>=20?'var(--go)':'var(--wa)';
+  fb.hidden=false;
+}
+
+// ===== SAVE / LOAD =====
+function saveState(){
+  try{
+    localStorage.setItem('drr_state',JSON.stringify({
+      score:st.score,
+      badges:[...st.badges],
+      modulesDone:[...st.modulesDone],
+      quizScore:st.quizScore
+    }));
+  }catch(e){}
+}
+
+function loadState(){
+  try{
+    const raw=localStorage.getItem('drr_state');
+    if(!raw)return;
+    const s=JSON.parse(raw);
+    st.score=s.score||0;
+    st.badges=new Set(s.badges||[]);
+    st.modulesDone=new Set(s.modulesDone||[]);
+    st.quizScore=s.quizScore||0;
+  }catch(e){}
+}
+
+// ===== INIT =====
+(function init(){
+  loadState();
+  // Welcome counters
+  setTimeout(()=>{
+    animateCount(document.getElementById('cnt1'),2100,' M ton/año',2000);
+    animateCount(document.getElementById('cnt2'),58,'%',1500);
+    animateCount(document.getElementById('cnt3'),94,'%',1800);
+  },400);
+  // Init quiz
+  initQuiz();
+  // Init M1
+  initM1();
+  // Init Blueprint
+  initBP();
+  // Init M3-M7
+  initM3();initM4();initM5();initM6();initM7();routeRender();labRender();compRender();bitRender();
+  // Init challenge
+  initChallenge();
+  // Render map
+  renderMap();
+  // Render glossary
+  renderGlossary();
+  const _goTo=goTo;
+  const MODULE_IMG={'s-m1':'mod_m1','s-bp':'mod_bp','s-m2':'mod_m2','s-m3':'mod_m3','s-m4':'mod_m4','s-m5':'mod_m5','s-m6':'mod_m6','s-m7':'mod_m7','s-challenge':'mod_reto'};
+  window.goTo=function(id){
+    _goTo(id);
+    if(id==='s-prog')renderProgress();
+    if(id==='s-map')renderMap();
+    if(id==='s-glos')renderGlossary();
+    if(id==='s-bit')bitRender();
+    if(MODULE_IMG[id]){
+      const sec=document.getElementById(id);
+      if(!sec.querySelector('.mod-img')){
+        const img=document.createElement('img');
+        img.className='mod-img';img.src=`img/${MODULE_IMG[id]}.jpg`;img.alt='';
+        img.style.cssText='width:100%;border-radius:var(--r);margin-bottom:16px;display:block';
+        const hook=sec.querySelector('.mod-hook');
+        if(hook)hook.after(img);else sec.querySelector('.wrap').prepend(img);
+      }
+    }
+    if(narrAudio){narrAudio.pause();narrAudio=null;}
+  };
+})();
+</script>
+
+</body></html>
